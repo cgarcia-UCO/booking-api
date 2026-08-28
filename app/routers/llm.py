@@ -111,6 +111,7 @@ async def llm_chat(
                 messages=messages,
                 max_completion_tokens=config.LLM_MAX_COMPLETION_TOKENS,  # fixed server-side
                 timeout=config.LLM_REQUEST_TIMEOUT,
+                reasoning_effort="minimal",
             )
         except Exception as exc:  # noqa: BLE001 - never leak upstream error details to the client
             logger.warning("LLM call failed: %s", exc)
