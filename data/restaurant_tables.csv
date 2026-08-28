@@ -1,0 +1,382 @@
+table_id,restaurant_id,table_number,capacity,location,accessible,status
+1,1,1,2,indoor,False,available
+2,1,2,4,bar,False,available
+3,1,3,6,bar,True,available
+4,2,1,2,indoor,False,reserved
+5,2,2,8,indoor,True,available
+6,2,3,4,private room,True,available
+7,2,4,4,indoor,False,reserved
+8,2,5,6,indoor,True,available
+9,2,6,2,indoor,False,available
+10,2,7,2,indoor,False,available
+11,2,8,2,indoor,True,available
+12,3,1,2,indoor,True,available
+13,3,2,6,terrace,True,available
+14,3,3,2,indoor,False,unavailable
+15,3,4,2,indoor,False,occupied
+16,3,5,2,private room,False,unavailable
+17,3,6,4,terrace,False,available
+18,3,7,2,terrace,False,available
+19,3,8,8,indoor,True,available
+20,3,9,4,indoor,False,available
+21,3,10,4,private room,True,available
+22,3,11,8,indoor,False,reserved
+23,3,12,4,indoor,True,available
+24,4,1,2,indoor,True,occupied
+25,4,2,4,private room,False,available
+26,4,3,2,terrace,False,available
+27,4,4,10,terrace,True,available
+28,4,5,6,indoor,True,available
+29,4,6,8,terrace,True,available
+30,5,1,6,terrace,True,available
+31,5,2,4,indoor,False,available
+32,5,3,2,terrace,True,available
+33,5,4,2,terrace,False,occupied
+34,5,5,2,indoor,False,available
+35,5,6,6,indoor,True,available
+36,5,7,2,indoor,False,available
+37,5,8,6,indoor,False,available
+38,5,9,2,indoor,False,reserved
+39,5,10,6,bar,False,available
+40,5,11,4,bar,False,occupied
+41,5,12,4,indoor,False,available
+42,5,13,4,indoor,True,available
+43,5,14,2,indoor,True,available
+44,5,15,2,indoor,False,reserved
+45,5,16,4,private room,False,unavailable
+46,5,17,4,indoor,False,available
+47,6,1,4,indoor,False,available
+48,6,2,4,indoor,True,available
+49,6,3,8,terrace,False,available
+50,6,4,4,terrace,False,occupied
+51,6,5,6,indoor,True,reserved
+52,6,6,4,terrace,False,available
+53,6,7,2,indoor,False,available
+54,6,8,4,private room,False,available
+55,6,9,6,terrace,False,available
+56,7,1,4,private room,False,available
+57,7,2,4,bar,True,available
+58,7,3,10,terrace,True,available
+59,7,4,4,bar,False,available
+60,7,5,4,terrace,True,available
+61,7,6,6,private room,True,available
+62,7,7,10,bar,True,available
+63,7,8,4,indoor,False,reserved
+64,7,9,2,indoor,False,available
+65,7,10,2,private room,True,reserved
+66,7,11,2,indoor,True,reserved
+67,7,12,2,private room,True,available
+68,7,13,4,bar,True,available
+69,7,14,4,indoor,True,available
+70,8,1,4,terrace,True,available
+71,8,2,6,indoor,False,unavailable
+72,8,3,2,indoor,True,available
+73,8,4,10,terrace,False,available
+74,8,5,2,indoor,True,occupied
+75,8,6,10,bar,False,available
+76,8,7,4,indoor,True,available
+77,8,8,2,indoor,False,reserved
+78,8,9,8,indoor,False,occupied
+79,8,10,2,terrace,False,available
+80,8,11,4,terrace,True,available
+81,8,12,2,private room,False,reserved
+82,8,13,2,indoor,True,reserved
+83,8,14,2,indoor,False,available
+84,8,15,4,indoor,True,occupied
+85,8,16,8,private room,False,occupied
+86,8,17,6,indoor,True,available
+87,8,18,4,terrace,False,available
+88,9,1,2,terrace,True,available
+89,9,2,4,bar,True,available
+90,9,3,2,terrace,True,available
+91,9,4,6,terrace,True,available
+92,9,5,6,indoor,False,occupied
+93,9,6,6,indoor,True,available
+94,9,7,8,indoor,True,available
+95,9,8,6,indoor,False,occupied
+96,9,9,8,terrace,False,available
+97,9,10,4,terrace,False,available
+98,9,11,4,terrace,False,reserved
+99,9,12,2,indoor,True,available
+100,9,13,6,private room,False,available
+101,10,1,4,bar,False,available
+102,10,2,2,indoor,False,reserved
+103,10,3,10,indoor,True,available
+104,10,4,6,indoor,False,available
+105,10,5,4,indoor,True,available
+106,10,6,8,bar,True,available
+107,10,7,4,indoor,False,reserved
+108,10,8,6,terrace,True,unavailable
+109,10,9,2,private room,False,available
+110,10,10,6,indoor,False,available
+111,10,11,10,indoor,False,available
+112,11,1,6,bar,False,available
+113,11,2,8,indoor,True,available
+114,11,3,10,terrace,False,unavailable
+115,11,4,4,indoor,False,unavailable
+116,11,5,6,indoor,False,available
+117,11,6,4,indoor,False,available
+118,11,7,2,terrace,False,reserved
+119,11,8,6,terrace,True,available
+120,11,9,2,terrace,True,available
+121,11,10,2,terrace,False,available
+122,11,11,6,terrace,False,unavailable
+123,11,12,2,private room,True,reserved
+124,11,13,8,indoor,False,available
+125,11,14,2,private room,False,available
+126,11,15,10,terrace,True,available
+127,11,16,2,indoor,False,unavailable
+128,11,17,4,indoor,False,reserved
+129,11,18,4,terrace,False,available
+130,11,19,2,terrace,True,available
+131,11,20,2,indoor,False,available
+132,11,21,2,terrace,False,available
+133,11,22,6,terrace,True,available
+134,12,1,4,indoor,False,available
+135,12,2,2,private room,False,available
+136,12,3,6,indoor,False,available
+137,12,4,6,indoor,False,available
+138,12,5,6,terrace,True,reserved
+139,12,6,10,bar,True,available
+140,12,7,2,terrace,False,available
+141,12,8,2,indoor,True,available
+142,12,9,8,indoor,False,available
+143,12,10,4,indoor,True,occupied
+144,12,11,2,indoor,False,available
+145,13,1,6,terrace,True,available
+146,13,2,4,indoor,False,available
+147,13,3,4,indoor,True,reserved
+148,13,4,2,indoor,True,reserved
+149,13,5,10,terrace,True,available
+150,13,6,2,terrace,True,available
+151,13,7,4,private room,True,available
+152,13,8,2,indoor,False,available
+153,13,9,2,terrace,False,available
+154,13,10,2,indoor,False,reserved
+155,13,11,4,indoor,True,unavailable
+156,14,1,4,indoor,False,available
+157,14,2,2,indoor,False,available
+158,14,3,4,indoor,True,available
+159,14,4,8,indoor,True,available
+160,14,5,10,indoor,True,occupied
+161,14,6,2,terrace,True,reserved
+162,14,7,4,indoor,False,occupied
+163,14,8,4,terrace,False,available
+164,14,9,8,indoor,True,reserved
+165,14,10,10,indoor,False,reserved
+166,15,1,4,indoor,True,available
+167,15,2,2,indoor,True,reserved
+168,15,3,2,terrace,False,reserved
+169,15,4,2,terrace,False,available
+170,15,5,10,terrace,False,available
+171,15,6,4,private room,False,reserved
+172,15,7,2,bar,False,available
+173,15,8,2,indoor,True,reserved
+174,15,9,8,indoor,True,reserved
+175,15,10,4,indoor,False,unavailable
+176,15,11,4,indoor,False,available
+177,15,12,4,private room,False,available
+178,15,13,4,terrace,False,reserved
+179,15,14,6,terrace,False,available
+180,15,15,6,private room,False,occupied
+181,16,1,4,terrace,False,unavailable
+182,16,2,4,bar,False,available
+183,16,3,2,bar,False,unavailable
+184,16,4,4,indoor,True,available
+185,16,5,8,indoor,False,reserved
+186,16,6,2,indoor,True,available
+187,16,7,6,terrace,True,available
+188,16,8,8,terrace,False,available
+189,16,9,4,terrace,True,available
+190,16,10,4,indoor,True,available
+191,16,11,8,indoor,True,available
+192,16,12,4,indoor,False,available
+193,17,1,2,indoor,True,available
+194,17,2,2,indoor,True,available
+195,17,3,2,bar,True,available
+196,17,4,6,indoor,True,available
+197,17,5,4,bar,True,available
+198,17,6,2,indoor,False,occupied
+199,17,7,2,indoor,True,available
+200,17,8,2,indoor,False,reserved
+201,17,9,6,indoor,False,occupied
+202,17,10,4,private room,False,available
+203,17,11,2,indoor,True,available
+204,17,12,4,terrace,True,available
+205,17,13,2,private room,False,available
+206,17,14,2,indoor,False,available
+207,17,15,2,indoor,True,reserved
+208,17,16,8,private room,True,reserved
+209,18,1,2,terrace,False,reserved
+210,18,2,4,indoor,False,available
+211,18,3,4,indoor,True,available
+212,18,4,10,private room,True,available
+213,18,5,2,indoor,True,available
+214,18,6,4,indoor,True,available
+215,18,7,4,terrace,True,available
+216,18,8,2,indoor,True,available
+217,18,9,2,indoor,True,reserved
+218,18,10,2,indoor,False,available
+219,18,11,2,private room,True,available
+220,18,12,2,indoor,False,occupied
+221,18,13,2,terrace,True,reserved
+222,18,14,4,indoor,False,available
+223,18,15,4,bar,True,reserved
+224,18,16,2,terrace,False,available
+225,18,17,2,terrace,False,available
+226,18,18,4,indoor,False,unavailable
+227,19,1,2,terrace,True,available
+228,19,2,4,indoor,False,occupied
+229,19,3,8,private room,False,available
+230,19,4,6,private room,True,available
+231,19,5,8,indoor,True,available
+232,19,6,4,indoor,True,available
+233,19,7,6,terrace,False,available
+234,19,8,4,bar,False,available
+235,19,9,6,indoor,False,available
+236,19,10,2,indoor,True,available
+237,19,11,4,bar,False,available
+238,19,12,6,indoor,True,available
+239,19,13,6,terrace,True,available
+240,19,14,2,indoor,True,occupied
+241,19,15,8,indoor,False,available
+242,19,16,2,bar,False,available
+243,19,17,2,terrace,True,available
+244,20,1,6,indoor,False,available
+245,20,2,4,indoor,True,reserved
+246,20,3,6,indoor,False,available
+247,20,4,10,indoor,False,reserved
+248,20,5,6,indoor,False,available
+249,20,6,4,bar,False,available
+250,20,7,6,indoor,True,available
+251,20,8,6,terrace,True,available
+252,20,9,6,indoor,False,available
+253,20,10,2,indoor,False,available
+254,20,11,4,terrace,False,available
+255,21,1,2,indoor,True,available
+256,21,2,2,indoor,True,occupied
+257,21,3,10,indoor,False,reserved
+258,21,4,6,terrace,True,available
+259,21,5,6,terrace,False,available
+260,21,6,2,indoor,True,available
+261,21,7,2,private room,False,available
+262,21,8,6,indoor,False,available
+263,21,9,4,terrace,True,available
+264,21,10,2,indoor,True,available
+265,21,11,4,indoor,False,available
+266,21,12,2,indoor,False,available
+267,21,13,8,indoor,True,available
+268,21,14,4,indoor,False,available
+269,21,15,8,bar,True,available
+270,21,16,2,indoor,False,available
+271,21,17,4,indoor,False,occupied
+272,21,18,8,terrace,True,available
+273,22,1,4,terrace,True,available
+274,22,2,2,bar,True,available
+275,22,3,8,terrace,False,reserved
+276,22,4,6,indoor,True,occupied
+277,22,5,2,terrace,True,available
+278,22,6,6,terrace,True,available
+279,23,1,4,private room,True,available
+280,23,2,10,indoor,True,available
+281,23,3,4,terrace,True,reserved
+282,23,4,2,bar,False,available
+283,23,5,4,indoor,False,available
+284,23,6,6,indoor,False,available
+285,23,7,4,terrace,False,reserved
+286,23,8,2,indoor,False,available
+287,23,9,4,private room,False,available
+288,23,10,2,bar,False,reserved
+289,23,11,2,indoor,False,unavailable
+290,23,12,8,indoor,False,available
+291,23,13,2,private room,False,available
+292,23,14,2,private room,True,reserved
+293,23,15,4,indoor,False,occupied
+294,23,16,2,indoor,True,available
+295,23,17,4,bar,True,available
+296,23,18,6,terrace,False,available
+297,24,1,4,indoor,False,available
+298,24,2,2,indoor,False,available
+299,24,3,6,indoor,True,reserved
+300,24,4,4,bar,False,reserved
+301,24,5,8,indoor,False,available
+302,24,6,2,private room,False,unavailable
+303,24,7,2,indoor,False,available
+304,24,8,2,terrace,False,reserved
+305,24,9,6,indoor,True,available
+306,24,10,6,indoor,False,available
+307,24,11,2,indoor,True,available
+308,24,12,6,indoor,True,available
+309,24,13,2,terrace,False,available
+310,24,14,4,terrace,True,available
+311,24,15,10,terrace,False,reserved
+312,24,16,2,indoor,False,available
+313,24,17,4,indoor,True,available
+314,24,18,6,terrace,False,reserved
+315,24,19,2,indoor,False,available
+316,24,20,6,indoor,False,available
+317,25,1,4,bar,True,available
+318,25,2,4,bar,True,reserved
+319,25,3,8,bar,False,reserved
+320,25,4,2,private room,False,reserved
+321,25,5,4,private room,True,reserved
+322,25,6,2,indoor,False,available
+323,25,7,8,terrace,True,available
+324,25,8,4,indoor,True,available
+325,25,9,4,bar,True,occupied
+326,26,1,4,private room,False,available
+327,26,2,2,indoor,False,available
+328,26,3,2,indoor,True,available
+329,26,4,6,indoor,True,available
+330,26,5,8,terrace,True,available
+331,26,6,4,indoor,False,available
+332,26,7,8,private room,True,available
+333,27,1,6,private room,True,available
+334,27,2,4,indoor,False,available
+335,27,3,4,terrace,False,available
+336,27,4,6,indoor,False,available
+337,27,5,2,indoor,True,available
+338,27,6,4,indoor,True,available
+339,27,7,8,indoor,True,reserved
+340,27,8,8,private room,False,available
+341,27,9,2,indoor,False,available
+342,27,10,6,indoor,True,available
+343,27,11,2,indoor,False,available
+344,27,12,2,terrace,True,occupied
+345,27,13,4,indoor,True,available
+346,27,14,8,private room,False,available
+347,27,15,4,indoor,True,available
+348,27,16,2,terrace,False,available
+349,27,17,4,indoor,False,available
+350,27,18,8,indoor,False,available
+351,27,19,2,indoor,True,available
+352,27,20,2,terrace,True,available
+353,27,21,4,indoor,False,available
+354,28,1,2,terrace,False,available
+355,28,2,10,private room,False,reserved
+356,28,3,2,indoor,True,available
+357,28,4,8,indoor,False,available
+358,28,5,4,indoor,True,reserved
+359,28,6,2,indoor,False,available
+360,28,7,2,private room,True,available
+361,28,8,2,indoor,True,unavailable
+362,28,9,10,terrace,True,reserved
+363,28,10,2,bar,False,occupied
+364,28,11,4,terrace,True,available
+365,28,12,4,indoor,False,reserved
+366,28,13,2,indoor,True,available
+367,29,1,4,indoor,True,reserved
+368,29,2,4,indoor,True,available
+369,29,3,8,bar,False,reserved
+370,29,4,2,terrace,False,available
+371,29,5,4,terrace,False,available
+372,29,6,4,terrace,True,available
+373,29,7,4,indoor,True,available
+374,30,1,2,indoor,True,unavailable
+375,30,2,8,indoor,False,reserved
+376,30,3,6,indoor,True,available
+377,30,4,2,bar,True,reserved
+378,30,5,6,indoor,True,occupied
+379,30,6,4,indoor,True,available
+380,30,7,6,bar,False,available
+381,30,8,10,private room,True,unavailable

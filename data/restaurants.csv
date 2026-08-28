@@ -1,0 +1,153 @@
+restaurant_id,name,description,cuisine_types,city,opening_hours,price_range,rating,review_count,services,accessible,pet_friendly,dress_code,max_capacity
+1,Terrace The Square,"Right in Portland, Terrace The Square offers a menu inspired by vegan cuisine, designed for all kinds of diners.
+
+Terrace The Square has an average rating of 3.1/5 based on 58 customer reviews.",vegan,Portland,"12:30-16:00, 20:00-23:00",upscale,3.1,58,valet parking;smoking area;takeaway;kids menu,True,False,smart casual,12
+2,Chophouse The Old Inn,"Right in Tokyo, Chophouse The Old Inn offers a menu inspired by American, Spanish cuisine, designed for all kinds of diners.
+
+Chophouse The Old Inn has an average rating of 3.8/5 based on 20 customer reviews.",American;Spanish,Tokyo,"12:30-16:00, 19:30-23:30",mid-range,3.8,20,bar counter;takeaway;smoking area;parking;tasting menu,False,True,smart casual,30
+3,Chophouse The Square,"Right in Amsterdam, Chophouse The Square offers a menu inspired by Thai, Indian cuisine, designed for all kinds of diners.
+
+Chophouse The Square has an average rating of 3.8/5 based on 34 customer reviews.",Thai;Indian,Amsterdam,"12:30-16:00, 19:30-23:30",mid-range,3.8,34,bar counter;kids menu;live music;tasting menu;private events;smoking area,True,True,casual,45
+4,Restaurant The Square,"Right in New Orleans, Restaurant The Square offers a menu inspired by Indian cuisine, designed for all kinds of diners.
+
+Restaurant The Square has an average rating of 3.9/5 based on 20 customer reviews.",Indian,New Orleans,"12:30-16:00, 20:00-23:00",upscale,3.9,20,terrace;live music,True,False,smart casual,28
+5,Bistro The Yard,"Right in Barcelona, Bistro The Yard offers a menu inspired by Peruvian cuisine, designed for all kinds of diners.
+
+The venue offers parking and delivery, and follows a casual dress code.
+
+Bistro The Yard has an average rating of 3.3/5 based on 1 customer reviews.",Peruvian,Barcelona,"13:30-16:30, 19:30-23:00",budget,3.3,1,parking;delivery,True,False,casual,61
+6,Chophouse The Hearth,"Chophouse The Hearth is a Chinese restaurant located in Amsterdam, in the mid-range price range.
+
+The venue offers live music, delivery and takeaway, and follows a casual dress code.
+
+Chophouse The Hearth has an average rating of 3.8/5 based on 82 customer reviews.",Chinese,Amsterdam,"13:00-15:30, 20:30-23:00",mid-range,3.8,82,live music;delivery;takeaway,True,False,casual,37
+7,Terrace The Vine,"Right in Amsterdam, Terrace The Vine offers a menu inspired by Italian cuisine, designed for all kinds of diners.
+
+Its maximum capacity is 59 diners.
+
+The venue offers wifi, private events and valet parking, and follows a casual dress code.
+
+Terrace The Vine has an average rating of 3.7/5 based on 8 customer reviews.",Italian,Amsterdam,"12:30-15:30, 19:30-00:00",upscale,3.7,8,wifi;private events;valet parking,False,False,casual,59
+8,Grill The Olive Tree,"Right in Tokyo, Grill The Olive Tree offers a menu inspired by Indian cuisine, designed for all kinds of diners.
+
+Its maximum capacity is 79 diners. The premises are accessible for guests with reduced mobility.
+
+Grill The Olive Tree has an average rating of 3.7/5 based on 14 customer reviews.",Indian,Tokyo,13:00-00:00,mid-range,3.7,14,terrace;takeaway;smoking area;live music;private events;valet parking,True,False,smart casual,79
+9,Seafood House The Courtyard,"Right in Miami, Seafood House The Courtyard offers a menu inspired by Mexican, seafood cuisine, designed for all kinds of diners.
+
+Its maximum capacity is 60 diners. The premises are accessible for guests with reduced mobility.
+
+The venue offers live music, terrace, tasting menu, smoking area and kids menu, and follows a smart casual dress code.
+
+Seafood House The Courtyard has an average rating of 3.4/5 based on 6 customer reviews.",Mexican;seafood,Miami,"12:30-16:30, 20:30-23:00",mid-range,3.4,6,live music;terrace;tasting menu;smoking area;kids menu,True,False,smart casual,60
+10,Chophouse The Lookout,"Right in Amsterdam, Chophouse The Lookout offers a menu inspired by vegan, Italian, Mexican cuisine, designed for all kinds of diners.
+
+The venue offers smoking area and delivery, and follows a formal dress code.
+
+Its maximum capacity is 60 diners. Pets are welcome at the venue.
+
+Chophouse The Lookout has an average rating of 3.7/5 based on 16 customer reviews.",vegan;Italian;Mexican,Amsterdam,"12:30-16:30, 20:30-00:00",mid-range,3.7,16,smoking area;delivery,False,True,formal,60
+11,Tavern The Lookout,"Right in Miami, Tavern The Lookout offers a menu inspired by American, steakhouse cuisine, designed for all kinds of diners.
+
+Tavern The Lookout has an average rating of 3.3/5 based on 19 customer reviews.",American;steakhouse,Miami,"13:00-15:30, 20:00-00:00",budget,3.3,19,wifi;terrace;tasting menu;private events;smoking area;kids menu,True,False,casual,100
+12,Seafood House The Hearth,"Right in Portland, Seafood House The Hearth offers a menu inspired by vegetarian, Chinese, Spanish cuisine, designed for all kinds of diners.
+
+Its maximum capacity is 52 diners.
+
+Seafood House The Hearth has an average rating of 3.4/5 based on 44 customer reviews.",vegetarian;Chinese;Spanish,Portland,13:30-00:00,mid-range,3.4,44,live music;private events;bar counter,False,False,casual,52
+13,Grill The Mill,"Grill The Mill is a seafood, Mediterranean, American restaurant located in London, in the upscale price range.
+
+Its maximum capacity is 41 diners.
+
+The venue offers live music, terrace, private events, delivery and parking, and follows a formal dress code.
+
+Grill The Mill has an average rating of 3.9/5 based on 2 customer reviews.",seafood;Mediterranean;American,London,"12:30-16:00, 19:30-23:30",upscale,3.9,2,live music;terrace;private events;delivery;parking,False,False,formal,41
+14,Restaurant The Mill,"Right in Portland, Restaurant The Mill offers a menu inspired by vegan, Peruvian, American cuisine, designed for all kinds of diners.
+
+The venue offers takeaway, tasting menu and delivery, and follows a smart casual dress code.
+
+Its maximum capacity is 49 diners.
+
+Restaurant The Mill has an average rating of 3.2/5 based on 5 customer reviews.",vegan;Peruvian;American,Portland,"13:00-16:00, 20:30-23:30",budget,3.2,5,takeaway;tasting menu;delivery,False,False,smart casual,49
+15,Restaurant Blue Terrace,"Right in Portland, Restaurant Blue Terrace offers a menu inspired by Peruvian, Mexican cuisine, designed for all kinds of diners.
+
+The venue offers smoking area, delivery, parking, kids menu and bar counter, and follows a casual dress code.
+
+Restaurant Blue Terrace has an average rating of 4.6/5 based on 8 customer reviews.",Peruvian;Mexican,Portland,"13:30-16:00, 19:30-00:00",mid-range,4.6,8,smoking area;delivery;parking;kids menu;bar counter,True,False,casual,60
+16,Gastropub The Pot,"Right in Amsterdam, Gastropub The Pot offers a menu inspired by vegetarian, American, Italian cuisine, designed for all kinds of diners.
+
+Gastropub The Pot has an average rating of 4.3/5 based on 18 customer reviews.",vegetarian;American;Italian,Amsterdam,"13:00-16:00, 20:00-00:00",mid-range,4.3,18,wifi;smoking area,True,False,casual,56
+17,House of The Pot,"House of The Pot is a vegetarian restaurant located in Miami, in the mid-range price range.
+
+The venue offers valet parking, tasting menu and kids menu, and follows a casual dress code.
+
+Its maximum capacity is 50 diners.
+
+House of The Pot has an average rating of 3.9/5 based on 25 customer reviews.",vegetarian,Miami,"12:30-16:30, 20:30-23:30",mid-range,3.9,25,valet parking;tasting menu;kids menu,False,False,casual,50
+18,Trattoria The Marina,"Right in Milan, Trattoria The Marina offers a menu inspired by steakhouse, Thai, fusion cuisine, designed for all kinds of diners.
+
+The venue offers valet parking, kids menu, delivery and takeaway, and follows a formal dress code.
+
+Its maximum capacity is 57 diners. Pets are welcome at the venue. The premises are accessible for guests with reduced mobility.
+
+Trattoria The Marina has an average rating of 4.2/5 based on 24 customer reviews.",steakhouse;Thai;fusion,Milan,"13:30-15:30, 20:00-00:00",mid-range,4.2,24,valet parking;kids menu;delivery;takeaway,True,True,formal,57
+19,Terrace The Corner,"Terrace The Corner is a French, Chinese restaurant located in Amsterdam, in the budget price range.
+
+The venue offers parking, bar counter, delivery, valet parking and live music, and follows a formal dress code.
+
+Terrace The Corner has an average rating of 4.8/5 based on 8 customer reviews.",French;Chinese,Amsterdam,"12:30-16:30, 19:30-23:00",budget,4.8,8,parking;bar counter;delivery;valet parking;live music,True,True,formal,80
+20,Restaurant The Pot,"Restaurant The Pot is a Chinese restaurant located in Brussels, in the budget price range.
+
+Its maximum capacity is 58 diners. Pets are welcome at the venue.
+
+The venue offers takeaway, private events, terrace and wifi, and follows a casual dress code.
+
+Restaurant The Pot has an average rating of 3.9/5 based on 30 customer reviews.",Chinese,Brussels,"12:30-16:00, 19:30-23:00",budget,3.9,30,takeaway;private events;terrace;wifi,False,True,casual,58
+21,Restaurant The Vine,"Right in Brussels, Restaurant The Vine offers a menu inspired by Thai cuisine, designed for all kinds of diners.
+
+Its maximum capacity is 82 diners. The premises are accessible for guests with reduced mobility.
+
+Restaurant The Vine has an average rating of 4.1/5 based on 23 customer reviews.",Thai,Brussels,"13:30-15:30, 20:00-00:00",budget,4.1,23,bar counter;live music;private events;delivery;smoking area,True,False,casual,82
+22,Grill The Marina,"Grill The Marina is a vegetarian, Italian restaurant located in Miami, in the upscale price range.
+
+Its maximum capacity is 23 diners. Pets are welcome at the venue. The premises are accessible for guests with reduced mobility.
+
+Grill The Marina has an average rating of 3.8/5 based on 27 customer reviews.",vegetarian;Italian,Miami,"12:30-16:00, 20:00-23:30",upscale,3.8,27,wifi;private events;valet parking,True,True,formal,23
+23,Grill The Old Wall,"Right in Boston, Grill The Old Wall offers a menu inspired by American, Thai cuisine, designed for all kinds of diners.
+
+Its maximum capacity is 69 diners. Pets are welcome at the venue. The premises are accessible for guests with reduced mobility.
+
+The venue offers bar counter, takeaway, smoking area and delivery, and follows a casual dress code.
+
+Grill The Old Wall has an average rating of 3.4/5 based on 157 customer reviews.",American;Thai,Boston,13:00-23:30,budget,3.4,157,bar counter;takeaway;smoking area;delivery,True,True,casual,69
+24,Bistro The Corner,"Bistro The Corner is a Thai, Mexican, vegan restaurant located in Brussels, in the budget price range.
+
+Its maximum capacity is 84 diners. The premises are accessible for guests with reduced mobility.
+
+Bistro The Corner has an average rating of 3.0/5 based on 40 customer reviews.",Thai;Mexican;vegan,Brussels,"13:00-16:00, 19:30-23:00",budget,3.0,40,bar counter;live music,True,False,casual,84
+25,Grill The Vine,"Grill The Vine is a vegetarian restaurant located in Tokyo, in the mid-range price range.
+
+Grill The Vine has an average rating of 4.5/5 based on 73 customer reviews.",vegetarian,Tokyo,"13:30-15:30, 20:30-23:00",mid-range,4.5,73,delivery;live music,True,False,casual,38
+26,Restaurant The Cellar,"Right in Barcelona, Restaurant The Cellar offers a menu inspired by steakhouse, French, vegetarian cuisine, designed for all kinds of diners.
+
+Restaurant The Cellar has an average rating of 4.0/5 based on 5 customer reviews.",steakhouse;French;vegetarian,Barcelona,12:30-23:30,mid-range,4.0,5,live music;delivery;bar counter,True,True,smart casual,30
+27,Terrace The Helm,"Right in Oslo, Terrace The Helm offers a menu inspired by vegetarian cuisine, designed for all kinds of diners.
+
+The venue offers live music, parking, tasting menu, private events and bar counter, and follows a casual dress code.
+
+Terrace The Helm has an average rating of 4.0/5 based on 110 customer reviews.",vegetarian,Oslo,"13:00-15:30, 20:00-23:00",upscale,4.0,110,live music;parking;tasting menu;private events;bar counter,True,False,casual,90
+28,Gastropub The Harbor,"Gastropub The Harbor is a fusion, Italian, French restaurant located in Tokyo, in the mid-range price range.
+
+Its maximum capacity is 53 diners. The premises are accessible for guests with reduced mobility.
+
+Gastropub The Harbor has an average rating of 4.3/5 based on 15 customer reviews.",fusion;Italian;French,Tokyo,13:30-23:00,mid-range,4.3,15,parking;kids menu,True,False,casual,53
+29,Terrace Old Flavor,"Right in Amsterdam, Terrace Old Flavor offers a menu inspired by vegetarian, seafood, steakhouse cuisine, designed for all kinds of diners.
+
+Terrace Old Flavor has an average rating of 4.3/5 based on 30 customer reviews.",vegetarian;seafood;steakhouse,Amsterdam,"13:00-15:30, 20:00-23:30",budget,4.3,30,takeaway;valet parking,True,False,smart casual,27
+30,Terrace The Cellar,"Right in Amsterdam, Terrace The Cellar offers a menu inspired by Japanese, vegetarian cuisine, designed for all kinds of diners.
+
+Its maximum capacity is 42 diners. The premises are accessible for guests with reduced mobility.
+
+The venue offers smoking area, terrace, valet parking, bar counter and wifi, and follows a smart casual dress code.
+
+Terrace The Cellar has an average rating of 3.5/5 based on 18 customer reviews.",Japanese;vegetarian,Amsterdam,"12:30-16:00, 19:30-23:30",mid-range,3.5,18,smoking area;terrace;valet parking;bar counter;wifi,True,False,smart casual,42

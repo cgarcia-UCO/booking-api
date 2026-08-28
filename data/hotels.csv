@@ -1,0 +1,148 @@
+hotel_id,name,description,category,type,city,check_in_time,check_out_time,reception_24h,services,pet_friendly,accessible,rating,review_count,price_range
+1,Grand Hotel Palm Grove,"Located in Tokyo, Grand Hotel Palm Grove offers a 3-star stay geared toward a balance between comfort, service and price.
+
+Among its facilities are swimming pool, wifi, bike rental, parking, airport shuttle, room service and restaurant, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+Under house policy, the property does not allow pets. It also features facilities adapted for guests with reduced mobility.
+
+With an average rating of 3.8/5 based on 25 guest reviews, Grand Hotel Palm Grove is positioned as a mid-range-priced option for exploring Tokyo.",3,hotel,Tokyo,15:00,12:00,False,swimming pool;wifi;bike rental;parking;airport shuttle;room service;restaurant,False,True,3.8,25,mid-range
+2,Manor Silver Bay,"Located in Portland, Manor Silver Bay offers a 2-star stay geared toward those looking for a simple, comfortable and well-located stay.
+
+Under house policy, the property does not allow pets.
+
+With an average rating of 3.2/5 based on 89 guest reviews, Manor Silver Bay is positioned as a mid-range-priced option for exploring Portland.",2,hotel,Portland,14:00,11:00,False,wifi;gym;spa;event hall;parking,False,False,3.2,89,mid-range
+3,Boutique Hotel Sunset,"Boutique Hotel Sunset stands out among the accommodations in Boston, with a 5-star rating.
+
+Under house policy, the property does not allow pets.
+
+Its location in Boston makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Among its facilities are sports courts, airport shuttle, bar, heated pool and wifi, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 4.6/5 based on 39 guest reviews, Boutique Hotel Sunset is positioned as a luxury-priced option for exploring Boston.",5,aparthotel,Boston,14:00,10:00,False,sports courts;airport shuttle;bar;heated pool;wifi,False,False,4.6,39,luxury
+4,Grand Hotel Golden Tower,"Located in Brussels, Grand Hotel Golden Tower offers a 3-star stay geared toward a balance between comfort, service and price.
+
+Its location in Brussels makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Under house policy, the property does not allow pets. The front desk is staffed 24 hours a day, so guests can check in or resolve any issue at any time.
+
+Among its facilities are childcare, business center, airport shuttle, gym, laundry service, garden and spa, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 4.3/5 based on 4 guest reviews, Grand Hotel Golden Tower is positioned as a mid-range-priced option for exploring Brussels.",3,hostel,Brussels,15:00,10:00,True,childcare;business center;airport shuttle;gym;laundry service;garden;spa,False,False,4.3,4,mid-range
+5,Resort Bayside,"Located in Brussels, Resort Bayside offers a 4-star stay geared toward those looking for a comfortable, well-equipped stay.
+
+Its location in Brussels makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+With an average rating of 4.7/5 based on 154 guest reviews, Resort Bayside is positioned as a mid-range-priced option for exploring Brussels.",4,hostel,Brussels,16:00,12:00,False,bike rental;bar;terrace;swimming pool;business center;sports courts;restaurant,False,False,4.7,154,mid-range
+6,Palace Central Park,"Located in New Orleans, Palace Central Park offers a 4-star stay geared toward those looking for a comfortable, well-equipped stay.
+
+Among its facilities are room service, airport shuttle, spa, parking, sports courts, garden, childcare and heated pool, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+Its location in New Orleans makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Under house policy, the property does not allow pets. The front desk is staffed 24 hours a day, so guests can check in or resolve any issue at any time.
+
+With an average rating of 4.6/5 based on 5 guest reviews, Palace Central Park is positioned as a mid-range-priced option for exploring New Orleans.",4,resort,New Orleans,14:00,11:00,True,room service;airport shuttle;spa;parking;sports courts;garden;childcare;heated pool,False,False,4.6,5,mid-range
+7,Aparthotel Lighthouse,"Located in London, Aparthotel Lighthouse offers a 3-star stay geared toward a balance between comfort, service and price.
+
+Its location in London makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+With an average rating of 3.9/5 based on 18 guest reviews, Aparthotel Lighthouse is positioned as a budget-priced option for exploring London.",3,resort,London,14:00,12:00,True,gym;event hall;swimming pool;room service,False,True,3.9,18,budget
+8,Boutique Hotel Willow Grove,"Boutique Hotel Willow Grove is a 4-star hotel located right in Tokyo, designed for those looking for a comfortable, well-equipped stay.
+
+Among its facilities are wifi, parking, heated pool, event hall, sports courts, bar, bike rental, business center and airport shuttle, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 4.0/5 based on 55 guest reviews, Boutique Hotel Willow Grove is positioned as an upscale-priced option for exploring Tokyo.",4,hotel,Tokyo,15:00,10:00,True,wifi;parking;heated pool;event hall;sports courts;bar;bike rental;business center;airport shuttle,False,True,4.0,55,upscale
+9,Hotel Central Park,"Located in Madrid, Hotel Central Park offers a 3-star stay geared toward a balance between comfort, service and price.
+
+With an average rating of 4.2/5 based on 14 guest reviews, Hotel Central Park is positioned as an upscale-priced option for exploring Madrid.",3,hotel,Madrid,16:00,11:00,False,sports courts;parking;spa;event hall;laundry service;swimming pool,False,False,4.2,14,upscale
+10,Hotel Marina,"Hotel Marina is a 3-star aparthotel located right in Oslo, designed for a balance between comfort, service and price.
+
+Among its facilities are sports courts, garden, restaurant, parking, heated pool, terrace, swimming pool, room service and laundry service, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 4.3/5 based on 20 guest reviews, Hotel Marina is positioned as an upscale-priced option for exploring Oslo.",3,aparthotel,Oslo,15:00,11:00,True,sports courts;garden;restaurant;parking;heated pool;terrace;swimming pool;room service;laundry service,True,True,4.3,20,upscale
+11,Manor St. Mark's,"Manor St. Mark's is a 3-star boutique hotel located right in Milan, designed for a balance between comfort, service and price.
+
+With an average rating of 3.8/5 based on 4 guest reviews, Manor St. Mark's is positioned as a mid-range-priced option for exploring Milan.",3,boutique,Milan,15:00,12:00,True,spa;gym;bike rental;event hall;room service;garden;laundry service,False,True,3.8,4,mid-range
+12,Palace Harborview,"Palace Harborview stands out among the accommodations in Miami, with a 2-star rating.
+
+With an average rating of 3.9/5 based on 34 guest reviews, Palace Harborview is positioned as a budget-priced option for exploring Miami.",2,hotel,Miami,16:00,10:00,True,gym;airport shuttle;business center;restaurant;sports courts,False,True,3.9,34,budget
+13,Aparthotel Central Park,"Aparthotel Central Park stands out among the accommodations in Miami, with a 4-star rating.
+
+Its location in Miami makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Under house policy, the property does not allow pets.
+
+Among its facilities are wifi, event hall, sports courts, heated pool, terrace, restaurant and laundry service, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 4.6/5 based on 170 guest reviews, Aparthotel Central Park is positioned as a mid-range-priced option for exploring Miami.",4,hostel,Miami,14:00,12:00,False,wifi;event hall;sports courts;heated pool;terrace;restaurant;laundry service,False,False,4.6,170,mid-range
+14,Inn Riverside,"Inn Riverside is a 5-star resort located right in Boston, designed for the most demanding travelers looking for an exclusive experience.
+
+The property is pet friendly, so guests can travel with their pets.
+
+With an average rating of 4.8/5 based on 30 guest reviews, Inn Riverside is positioned as a luxury-priced option for exploring Boston.",5,resort,Boston,13:00,11:00,False,sports courts;restaurant;bike rental;gym;swimming pool;heated pool;bar;garden;business center;parking;laundry service;room service,True,False,4.8,30,luxury
+15,Hotel Lighthouse,"Hotel Lighthouse is a 4-star hotel located right in London, designed for those looking for a comfortable, well-equipped stay.
+
+Under house policy, the property does not allow pets. It also features facilities adapted for guests with reduced mobility.
+
+Its location in London makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Among its facilities are laundry service, bar, parking, wifi, bike rental and swimming pool, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 3.8/5 based on 85 guest reviews, Hotel Lighthouse is positioned as an upscale-priced option for exploring London.",4,hotel,London,16:00,11:00,False,laundry service;bar;parking;wifi;bike rental;swimming pool,False,True,3.8,85,upscale
+16,Boutique Hotel Old Mill,"Boutique Hotel Old Mill stands out among the accommodations in Barcelona, with a 3-star rating.
+
+With an average rating of 4.0/5 based on 22 guest reviews, Boutique Hotel Old Mill is positioned as an upscale-priced option for exploring Barcelona.",3,aparthotel,Barcelona,14:00,11:00,True,swimming pool;parking;laundry service;gym;room service,False,True,4.0,22,upscale
+17,Boutique Hotel Golden Tower,"Boutique Hotel Golden Tower stands out among the accommodations in Amsterdam, with a 1-star rating.
+
+Its location in Amsterdam makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Among its facilities are wifi, business center, bike rental, spa and event hall, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 4.0/5 based on 24 guest reviews, Boutique Hotel Golden Tower is positioned as a budget-priced option for exploring Amsterdam.",1,hotel,Amsterdam,14:00,11:00,True,wifi;business center;bike rental;spa;event hall,False,True,4.0,24,budget
+18,Inn Lighthouse,"Inn Lighthouse is a 4-star boutique hotel located right in Portland, designed for those looking for a comfortable, well-equipped stay.
+
+Its location in Portland makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Under house policy, the property does not allow pets. It also features facilities adapted for guests with reduced mobility. The front desk is staffed 24 hours a day, so guests can check in or resolve any issue at any time.
+
+With an average rating of 4.9/5 based on 82 guest reviews, Inn Lighthouse is positioned as an upscale-priced option for exploring Portland.",4,boutique,Portland,13:00,12:00,True,childcare;swimming pool;room service;restaurant;parking;wifi;garden,False,True,4.9,82,upscale
+19,Lodge Riverside,"Lodge Riverside is a 4-star hotel located right in Milan, designed for those looking for a comfortable, well-equipped stay.
+
+With an average rating of 4.6/5 based on 81 guest reviews, Lodge Riverside is positioned as a mid-range-priced option for exploring Milan.",4,hotel,Milan,16:00,12:00,True,spa;airport shuttle;garden,False,False,4.6,81,mid-range
+20,Palace Four Winds,"Palace Four Winds is a 4-star hotel located right in Miami, designed for those looking for a comfortable, well-equipped stay.
+
+Under house policy, the property does not allow pets. The front desk is staffed 24 hours a day, so guests can check in or resolve any issue at any time.
+
+Its location in Miami makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Among its facilities are terrace, spa, airport shuttle, sports courts, bike rental, heated pool, garden, gym, business center, laundry service and bar, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 3.8/5 based on 96 guest reviews, Palace Four Winds is positioned as an upscale-priced option for exploring Miami.",4,hotel,Miami,15:00,11:00,True,terrace;spa;airport shuttle;sports courts;bike rental;heated pool;garden;gym;business center;laundry service;bar,False,False,3.8,96,upscale
+21,Hotel Sunset,"Located in Brussels, Hotel Sunset offers a 3-star stay geared toward a balance between comfort, service and price.
+
+Its location in Brussels makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+Among its facilities are room service, airport shuttle, laundry service, bar, terrace, garden, spa and gym, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+The property is pet friendly, so guests can travel with their pets. It also features facilities adapted for guests with reduced mobility. The front desk is staffed 24 hours a day, so guests can check in or resolve any issue at any time.
+
+With an average rating of 4.0/5 based on 19 guest reviews, Hotel Sunset is positioned as a mid-range-priced option for exploring Brussels.",3,hotel,Brussels,15:00,12:00,True,room service;airport shuttle;laundry service;bar;terrace;garden;spa;gym,True,True,4.0,19,mid-range
+22,Inn Mountain Rest,"Inn Mountain Rest stands out among the accommodations in Amsterdam, with a 4-star rating.
+
+With an average rating of 4.7/5 based on 12 guest reviews, Inn Mountain Rest is positioned as a luxury-priced option for exploring Amsterdam.",4,hostel,Amsterdam,16:00,11:00,False,sports courts;airport shuttle;garden;parking;restaurant;wifi;heated pool;swimming pool;childcare,False,False,4.7,12,luxury
+23,Grand Hotel Cedar Hill,"Grand Hotel Cedar Hill is a 1-star aparthotel located right in Barcelona, designed for travelers on a tight budget looking for the essentials.
+
+With an average rating of 3.6/5 based on 101 guest reviews, Grand Hotel Cedar Hill is positioned as a budget-priced option for exploring Barcelona.",1,aparthotel,Barcelona,16:00,11:00,True,bar;spa;laundry service;wifi,False,True,3.6,101,budget
+24,Boutique Hotel Central Park,"Boutique Hotel Central Park stands out among the accommodations in Barcelona, with a 2-star rating.
+
+With an average rating of 3.4/5 based on 26 guest reviews, Boutique Hotel Central Park is positioned as a budget-priced option for exploring Barcelona.",2,rural,Barcelona,15:00,10:00,False,airport shuttle;wifi;swimming pool,False,True,3.4,26,budget
+25,Hotel Palm Grove,"Hotel Palm Grove stands out among the accommodations in Amsterdam, with a 2-star rating.
+
+Its location in Amsterdam makes it easy to reach the main points of interest and shopping areas of the city, as well as the main transport links, making it a good base for both leisure and business trips.
+
+The property is pet friendly, so guests can travel with their pets. The front desk is staffed 24 hours a day, so guests can check in or resolve any issue at any time.
+
+Among its facilities are childcare, wifi, gym, room service, business center and event hall, designed to make guests' stay as pleasant as possible. The hotel's team pays special attention to the upkeep and cleanliness of all these common areas.
+
+With an average rating of 3.3/5 based on 106 guest reviews, Hotel Palm Grove is positioned as a budget-priced option for exploring Amsterdam.",2,hotel,Amsterdam,15:00,11:00,True,childcare;wifi;gym;room service;business center;event hall,True,False,3.3,106,budget

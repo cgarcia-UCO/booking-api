@@ -1,0 +1,68 @@
+activity_id,name,description,activity_type,category,city,opening_hours,duration_minutes,min_age,max_age,accessible,indoor_outdoor,max_capacity,rating,review_count,services,price
+1,Arts Space,"Located in Barcelona, Arts Space is one of the most visited water park venues in the area, with an offering centered on slides and water rides.
+
+Arts Space has an average rating of 4.0/5 based on 70 visitor reviews.",water_park,slides and water rides,Barcelona,10:00-19:00,391,0,,True,mixed,2667,4.0,70,wifi;wheelchair access;professional photography;parking;equipment rental,38.08
+2,Vertigo Hall,"Vertigo Hall is a guided tour located in Amsterdam, themed around nature.
+
+Vertigo Hall has an average rating of 3.4/5 based on 13 visitor reviews.",guided_tour,nature,Amsterdam,09:30-21:00,107,0,,True,mixed,12,3.4,13,equipment rental;cloakroom;picnic area,8.25
+3,Metropolis Cinema,"Located in Madrid, Metropolis Cinema is one of the most visited zoo venues in the area, with an offering centered on African wildlife.
+
+Metropolis Cinema has an average rating of 4.5/5 based on 16 visitor reviews.",zoo,African wildlife,Madrid,09:30-20:00,248,0,,False,outdoor,1560,4.5,16,professional photography;gift shop;cloakroom;wifi,24.14
+4,Vertigo Hall Theatre,"Located in Milan, Vertigo Hall Theatre is one of the most visited theatre venues in the area, with an offering centered on musical.
+
+The standard admission price is 30.69 EUR per person.
+
+Its services include wheelchair access, equipment rental and professional photography.
+
+Vertigo Hall Theatre has an average rating of 3.7/5 based on 93 visitor reviews.",theatre,musical,Milan,16:00-23:30,89,0,,False,indoor,220,3.7,93,wheelchair access;equipment rental;professional photography,30.69
+5,Central Gallery,"Central Gallery is a guided tour located in Madrid, themed around food and wine.
+
+Central Gallery has an average rating of 4.8/5 based on 11 visitor reviews.",guided_tour,food and wine,Madrid,09:30-20:00,163,0,,True,outdoor,23,4.8,11,gift shop;audio guides,9.95
+6,Arts Space Concert Hall,"Located in Portland, Arts Space Concert Hall is one of the most visited concert hall venues in the area, with an offering centered on live music.
+
+The venue is adapted for guests with reduced mobility. The standard admission price is 46.28 EUR per person.
+
+Arts Space Concert Hall has an average rating of 4.1/5 based on 152 visitor reviews.",concert,live music,Portland,16:00-23:30,107,0,,True,indoor,2128,4.1,152,gift shop;cloakroom;parking;audio guides,46.28
+7,Magic World,"Magic World is a theme park located in Milan, themed around family theme park.
+
+A visit lasts an average of 252 minutes and is recommended from age 0 onward. The setting is mixed and the venue has a maximum capacity of 2762 people.
+
+Its services include equipment rental, professional photography, restaurant, cafe and picnic area.
+
+Magic World has an average rating of 4.0/5 based on 192 visitor reviews.",theme_park,family theme park,Milan,09:30-18:00,252,0,,True,mixed,2762,4.0,192,equipment rental;professional photography;restaurant;cafe;picnic area,41.89
+8,Wild Kingdom,"Located in Milan, Wild Kingdom is one of the most visited theatre venues in the area, with an offering centered on contemporary theatre.
+
+Wild Kingdom has an average rating of 3.7/5 based on 35 visitor reviews.",theatre,contemporary theatre,Milan,18:00-00:30,89,0,,True,indoor,491,3.7,35,picnic area;parking;wifi;restaurant;equipment rental;wheelchair access,40.27
+9,Enchanted Forest,"Located in Tokyo, Enchanted Forest is one of the most visited theatre venues in the area, with an offering centered on contemporary theatre.
+
+A visit lasts an average of 128 minutes and is recommended from age 0 onward. The setting is indoor and the venue has a maximum capacity of 383 people.
+
+Enchanted Forest has an average rating of 3.8/5 based on 10 visitor reviews.",theatre,contemporary theatre,Tokyo,18:00-23:30,128,0,,True,indoor,383,3.8,10,cloakroom;restaurant;gift shop;professional photography;cafe,25.36
+10,Wild Kingdom Museum,"Located in New Orleans, Wild Kingdom Museum is one of the most visited museum venues in the area, with an offering centered on science.
+
+Wild Kingdom Museum has an average rating of 4.2/5 based on 116 visitor reviews.",museum,science,New Orleans,09:30-19:00,101,0,,False,indoor,666,4.2,116,restaurant;cloakroom;wheelchair access,8.67
+11,Aqua Fantasy,"Aqua Fantasy is a cinema located in London, themed around multiplex.
+
+The venue is adapted for guests with reduced mobility. The standard admission price is 8.29 EUR per person.
+
+Its services include cloakroom and wheelchair access.
+
+Aqua Fantasy has an average rating of 4.6/5 based on 39 visitor reviews.",cinema,multiplex,London,17:00-00:30,146,0,,True,indoor,314,4.6,39,cloakroom;wheelchair access,8.29
+12,City of Senses,"Located in Barcelona, City of Senses is one of the most visited guided tour venues in the area, with an offering centered on historical.
+
+A visit lasts an average of 141 minutes and is recommended from age 0 onward. The setting is mixed and the venue has a maximum capacity of 19 people.
+
+City of Senses has an average rating of 3.5/5 based on 25 visitor reviews.",guided_tour,historical,Barcelona,10:00-19:00,141,0,,True,mixed,19,3.5,25,wheelchair access;wifi;professional photography;parking,11.2
+13,Wild Kingdom Cinema,"Located in Portland, Wild Kingdom Cinema is one of the most visited cinema venues in the area, with an offering centered on arthouse cinema.
+
+Wild Kingdom Cinema has an average rating of 4.5/5 based on 14 visitor reviews.",cinema,arthouse cinema,Portland,18:00-00:00,111,0,,True,indoor,195,4.5,14,audio guides;restaurant;lockers;cloakroom,10.85
+14,The Great Escape,"Located in Barcelona, The Great Escape is one of the most visited concert hall venues in the area, with an offering centered on multi-purpose venue.
+
+The Great Escape has an average rating of 3.9/5 based on 14 visitor reviews.",concert,multi-purpose venue,Barcelona,17:00-00:30,107,0,,True,mixed,369,3.9,14,wheelchair access;picnic area;lockers,38.31
+15,City of Senses Cinema,"City of Senses Cinema is a cinema located in Oslo, themed around IMAX screen.
+
+The venue is adapted for guests with reduced mobility. The standard admission price is 10.38 EUR per person.
+
+A visit lasts an average of 148 minutes and is recommended from age 7 onward. The setting is indoor and the venue has a maximum capacity of 386 people.
+
+City of Senses Cinema has an average rating of 4.2/5 based on 20 visitor reviews.",cinema,IMAX screen,Oslo,16:00-00:00,148,7,,True,indoor,386,4.2,20,professional photography;cafe;gift shop;wheelchair access;equipment rental,10.38
