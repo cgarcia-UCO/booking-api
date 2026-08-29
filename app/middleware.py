@@ -40,7 +40,7 @@ class MaxBodySizeMiddleware:
         if content_length is not None:
             try:
                 if int(content_length) > self.max_bytes:
-                    await self._send_413(send)
+                    await self._send_413(send, self.max_bytes)
                     return
             except ValueError:
                 pass  # malformed header; fall through to the streaming check below
@@ -69,11 +69,11 @@ class MaxBodySizeMiddleware:
             # Only safe to send our own response if the downstream app
             # hasn't already started sending one.
             if not response_started:
-                await self._send_413(send)
+                await self._send_413(send, self.max_bytes)
 
     @staticmethod
-    async def _send_413(send) -> None:
-        body = b'{"detail":"Request body too large (max 1 KB)."}'
+    async def _send_413(send, max_bytes: int) -> None:
+        body = f'{{"detail":"Request body too large (max {max_bytes} bytes)."}}'.encode()
         await send({
             "type": "http.response.start",
             "status": 413,

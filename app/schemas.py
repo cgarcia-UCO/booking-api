@@ -175,9 +175,9 @@ class Booking(BaseModel):
     total_price: float
     currency: str
     created_at: datetime
-    created_by_ip: str = Field(
-        description=f"IP address that created the booking, or '{config.SEED_IP}' "
-                    f"for bookings that ship with the seed dataset."
+    created_by_session: str = Field(
+        description=f"Session key (X-Session-Id) that created the booking, or "
+                    f"'{config.SEED_SESSION}' for bookings that ship with the seed dataset."
     )
 
 
@@ -303,22 +303,48 @@ class BookingCreateResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # LLM chat endpoint
 # ---------------------------------------------------------------------------
+class LLMMessage(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    role: Literal["system", "user", "assistant"]
+    content: str = Field(min_length=1, max_length=config.LLM_MAX_MESSAGE_CHARS)
+
+
 class LLMChatRequest(BaseModel):
     """
-    Deliberately minimal: the client may only supply the free-text prompt.
-    Model, temperature, max tokens, tools, etc. are all fixed server-side
-    (see app/config.py and app/routers/llm.py) and are not exposed here.
-    Any unexpected field in the request is rejected outright (422) rather
-    than silently ignored, per the "whitelist, don't accept arbitrary
-    client-supplied parameters" requirement.
+    The client supplies the *entire* messages list — typically a system
+    prompt followed by the running conversation history and the latest
+    user turn — exactly like the OpenAI Chat Completions `messages`
+    parameter. This is intentional for the workshop: attendees are meant
+    to design their own system prompts and history-management strategy.
+
+    Model, max output tokens, temperature, tools, etc. are still fixed
+    server-side (see app/config.py and app/routers/llm.py) and are not
+    exposed here. Any unexpected field in the request is rejected outright
+    (422) rather than silently ignored.
     """
     model_config = ConfigDict(extra="forbid")
 
-    message: str = Field(
+    messages: List[LLMMessage] = Field(
         min_length=1,
-        max_length=config.LLM_MAX_MESSAGE_CHARS,
-        description=f"Free-text prompt, max {config.LLM_MAX_MESSAGE_CHARS} characters (~1 KB).",
+        max_length=config.LLM_MAX_MESSAGES,
+        description=(
+            "Full list of messages to send to the model, in order (e.g. a system "
+            "message followed by prior user/assistant turns and the latest user "
+            f"message). Max {config.LLM_MAX_MESSAGES} messages; you are responsible "
+            "for deciding how much history to keep/truncate."
+        ),
     )
+
+    @model_validator(mode="after")
+    def _validate_total_size(self) -> "LLMChatRequest":
+        total_chars = sum(len(m.content) for m in self.messages)
+        if total_chars > config.LLM_MAX_TOTAL_CHARS:
+            raise ValueError(
+                f"Combined length of all messages ({total_chars} chars) exceeds the "
+                f"{config.LLM_MAX_TOTAL_CHARS}-character limit for a single call."
+            )
+        return self
 
 
 class LLMChatResponse(BaseModel):

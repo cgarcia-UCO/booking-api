@@ -1,28 +1,29 @@
 """
 app/routers/llm.py
 --------------------
-LLM chat endpoint, implementing the protections agreed for this specific
-use case (a short-lived, publicly reachable demo backed by a real OpenAI
-budget):
+LLM chat endpoint for the workshop: a thin, stateless proxy to OpenAI
+Chat Completions. Attendees never need an API key of their own — their
+code calls POST /llm/chat with the full `messages` list they want to send
+(system prompt + history included), and the server relays it to OpenAI.
 
-  - The OpenAI API key lives only on the server; it is never sent to, or
-    echoed back to, the client.
-  - The client may only supply a free-text `message` (max ~1 KB); model,
-    system prompt, and max output tokens are all fixed server-side
-    (see app/config.py) and are not exposed as request parameters.
-  - The HTTP body itself is capped at ~1 KB *before* it is parsed at all
-    (see app/middleware.py — this runs ahead of Pydantic validation).
-  - Rate limit: 1 request per second per IP.
-  - Global concurrency cap (default 100 simultaneous requests, across all
-    IPs combined); once reached, new requests are rejected immediately
-    (503) rather than queued.
-  - No global daily/lifetime budget limit is enforced by this app — that
-    is intentionally left to OpenAI's own project-level budget controls
-    (see README.md section 9 for the recommended setup).
-  - No access token is required for this endpoint, by explicit choice for
-    this short, supervised public demo.
-  - Upstream errors are turned into a generic message rather than leaking
-    internal details to the caller.
+Protections kept from the original design (see app/config.py for the
+full rationale):
+  - the OpenAI API key never leaves the server;
+  - model and max output tokens are fixed server-side, not client-chosen;
+  - the HTTP body is capped *before* it is parsed at all (see
+    app/middleware.py), and the combined size of all messages is capped
+    again at the Pydantic level;
+  - a rate limit and a global concurrency cap protect the shared OpenAI
+    budget from a runaway loop in someone's agent code.
+
+Difference from the original public-demo design: the client now supplies
+the entire `messages` array (not just a single free-text string), since
+designing the system prompt and managing conversation history is the
+point of the exercise. The rate-limit identity is the caller's
+X-Session-Id if provided (recommended — this is what the workshop
+notebook always sends), falling back to source IP otherwise, so that
+attendees sharing a single hosted-notebook egress IP don't all compete
+for one shared bucket.
 """
 from __future__ import annotations
 
@@ -31,7 +32,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from .. import config, schemas
-from ..deps import client_ip
+from ..deps import client_ip, optional_session_key
 from ..security import ConcurrencyLimiter, RateLimiter
 
 logger = logging.getLogger("llm")
@@ -59,18 +60,21 @@ def get_llm_concurrency_limiter(request: Request) -> ConcurrencyLimiter:
 
 @router.post(
     "/chat", response_model=schemas.LLMChatResponse,
-    summary="Chat with the workshop assistant",
+    summary="Chat with the LLM (relayed to OpenAI)",
     description=(
-        "Stateless LLM chat endpoint: send a free-text `message` (max ~1 KB) "
-        "and get back a reply. Model and output length are fixed server-side. "
-        f"Rate-limited to {config.LLM_RATE_LIMIT_MAX_REQUESTS} request(s) per "
-        f"{config.LLM_RATE_LIMIT_WINDOW_SECONDS:g}s per IP, with a global cap of "
-        f"{config.LLM_MAX_CONCURRENT_REQUESTS} concurrent requests."
+        "Send the full `messages` list (system prompt + history + latest user "
+        "turn, OpenAI Chat Completions format) and get back the model's reply. "
+        "Model and output length are fixed server-side. Send your X-Session-Id "
+        "header on this endpoint too, so your rate limit is tracked separately "
+        f"from other attendees. Rate-limited to {config.LLM_RATE_LIMIT_MAX_REQUESTS} "
+        f"request(s) per {config.LLM_RATE_LIMIT_WINDOW_SECONDS:g}s per caller, with a "
+        f"global cap of {config.LLM_MAX_CONCURRENT_REQUESTS} concurrent requests."
     ),
 )
 async def llm_chat(
     payload: schemas.LLMChatRequest,
     ip: str = Depends(client_ip),
+    session: str = Depends(optional_session_key),
     rate_limiter: RateLimiter = Depends(get_llm_rate_limiter),
     concurrency: ConcurrencyLimiter = Depends(get_llm_concurrency_limiter),
 ):
@@ -80,12 +84,16 @@ async def llm_chat(
             detail="The LLM endpoint is not configured on this server (missing OPENAI_API_KEY).",
         )
 
-    if not rate_limiter.check(ip, config.LLM_RATE_LIMIT_MAX_REQUESTS, config.LLM_RATE_LIMIT_WINDOW_SECONDS):
+    rate_limit_key = session or ip
+    if not rate_limiter.check(rate_limit_key, config.LLM_RATE_LIMIT_MAX_REQUESTS,
+                               config.LLM_RATE_LIMIT_WINDOW_SECONDS):
         raise HTTPException(
             status_code=429,
             detail=(
                 f"Rate limit exceeded: max {config.LLM_RATE_LIMIT_MAX_REQUESTS} request(s) "
-                f"per {config.LLM_RATE_LIMIT_WINDOW_SECONDS:g}s per IP. Please slow down."
+                f"per {config.LLM_RATE_LIMIT_WINDOW_SECONDS:g}s. Please slow down. "
+                + ("" if session else "Tip: send an X-Session-Id header so your limit isn't "
+                                       "shared with other callers on the same network.")
             ),
         )
 
@@ -100,10 +108,7 @@ async def llm_chat(
         )
 
     try:
-        messages = [
-            {"role": "system", "content": config.LLM_SYSTEM_PROMPT},
-            {"role": "user", "content": payload.message},
-        ]
+        messages = [{"role": m.role, "content": m.content} for m in payload.messages]
         try:
             client = _get_openai_client()
             response = await client.chat.completions.create(
@@ -111,7 +116,6 @@ async def llm_chat(
                 messages=messages,
                 max_completion_tokens=config.LLM_MAX_COMPLETION_TOKENS,  # fixed server-side
                 timeout=config.LLM_REQUEST_TIMEOUT,
-                reasoning_effort="minimal",
             )
         except Exception as exc:  # noqa: BLE001 - never leak upstream error details to the client
             logger.warning("LLM call failed: %s", exc)

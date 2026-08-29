@@ -201,7 +201,7 @@ def _load_seed_bookings(path: Path) -> list[dict]:
             "init_day": _d(r["init_day"]), "end_day": _d(r["end_day"]),
             "hour": r["hour"] or None, "num_people": _i(r["num_people"]),
             "total_price": _f(r["total_price"]), "currency": r["currency"],
-            "created_at": _dt(r["created_at"]), "created_by_ip": config.SEED_IP,
+            "created_at": _dt(r["created_at"]), "created_by_session": config.SEED_SESSION,
         })
     return out
 
@@ -279,62 +279,62 @@ class BookingStore:
         )
 
     # -- internal helpers ---------------------------------------------------
-    def _dynamic_for_ip(self, ip: str) -> list[dict]:
-        return [b for b in self.dynamic_bookings if b["created_by_ip"] == ip]
+    def _dynamic_for_session(self, session_key: str) -> list[dict]:
+        return [b for b in self.dynamic_bookings if b["created_by_session"] == session_key]
 
-    def visible_bookings(self, requester_ip: str) -> list[dict]:
-        """All bookings a given attendee (IP) is allowed to see: the shared
-        seed dataset plus whatever they personally created."""
-        return self.seed_bookings + self._dynamic_for_ip(requester_ip)
+    def visible_bookings(self, session_key: str) -> list[dict]:
+        """All bookings a given attendee (session key) is allowed to see:
+        the shared seed dataset plus whatever they personally created."""
+        return self.seed_bookings + self._dynamic_for_session(session_key)
 
-    def get_booking(self, booking_id: int, requester_ip: str) -> Optional[dict]:
+    def get_booking(self, booking_id: int, session_key: str) -> Optional[dict]:
         """Returns the booking only if it is visible to this requester."""
-        for b in self.visible_bookings(requester_ip):
+        for b in self.visible_bookings(session_key):
             if b["booking_id"] == booking_id:
                 return b
         return None
 
-    def _visible_for_room(self, room_id: int, requester_ip: str) -> list[dict]:
+    def _visible_for_room(self, room_id: int, session_key: str) -> list[dict]:
         seed = self._seed_by_room.get(room_id, [])
         own_dynamic = [b for b in self.dynamic_bookings
-                       if b["room_id"] == room_id and b["created_by_ip"] == requester_ip]
+                       if b["room_id"] == room_id and b["created_by_session"] == session_key]
         return seed + own_dynamic
 
-    def _visible_for_table(self, table_id: int, requester_ip: str) -> list[dict]:
+    def _visible_for_table(self, table_id: int, session_key: str) -> list[dict]:
         seed = self._seed_by_table.get(table_id, [])
         own_dynamic = [b for b in self.dynamic_bookings
-                       if b["table_id"] == table_id and b["created_by_ip"] == requester_ip]
+                       if b["table_id"] == table_id and b["created_by_session"] == session_key]
         return seed + own_dynamic
 
-    def _visible_for_activity(self, activity_id: int, requester_ip: str) -> list[dict]:
+    def _visible_for_activity(self, activity_id: int, session_key: str) -> list[dict]:
         seed = self._seed_by_activity.get(activity_id, [])
         own_dynamic = [b for b in self.dynamic_bookings
-                       if b["activity_id"] == activity_id and b["created_by_ip"] == requester_ip]
+                       if b["activity_id"] == activity_id and b["created_by_session"] == session_key]
         return seed + own_dynamic
 
     # -- availability checks -------------------------------------------------
-    def room_conflicts(self, room_id: int, init_day: date, end_day: date, requester_ip: str) -> list[dict]:
+    def room_conflicts(self, room_id: int, init_day: date, end_day: date, session_key: str) -> list[dict]:
         """Bookings that would conflict with [init_day, end_day) for this room."""
         conflicts = []
-        for b in self._visible_for_room(room_id, requester_ip):
+        for b in self._visible_for_room(room_id, session_key):
             if b["status"] not in BLOCKING_STATUSES:
                 continue
             if init_day < b["end_day"] and end_day > b["init_day"]:
                 conflicts.append(b)
         return conflicts
 
-    def table_conflicts(self, table_id: int, day: date, hour: str, requester_ip: str) -> list[dict]:
+    def table_conflicts(self, table_id: int, day: date, hour: str, session_key: str) -> list[dict]:
         conflicts = []
-        for b in self._visible_for_table(table_id, requester_ip):
+        for b in self._visible_for_table(table_id, session_key):
             if b["status"] not in BLOCKING_STATUSES:
                 continue
             if b["init_day"] == day and b["hour"] == hour:
                 conflicts.append(b)
         return conflicts
 
-    def activity_booked_count(self, activity_id: int, day: date, requester_ip: str) -> int:
+    def activity_booked_count(self, activity_id: int, day: date, session_key: str) -> int:
         total = 0
-        for b in self._visible_for_activity(activity_id, requester_ip):
+        for b in self._visible_for_activity(activity_id, session_key):
             if b["status"] not in BLOCKING_STATUSES:
                 continue
             if b["init_day"] == day:
@@ -342,7 +342,7 @@ class BookingStore:
         return total
 
     # -- booking creation / deletion ----------------------------------------
-    def create_booking(self, payload, requester_ip: str) -> dict:
+    def create_booking(self, payload, session_key: str) -> dict:
         """
         `payload` is a validated `schemas.BookingCreateRequest`. Raises
         `NotFound` if a referenced entity doesn't exist, or `BookingConflict`
@@ -362,7 +362,7 @@ class BookingStore:
                     raise BookingConflict(
                         f"room {payload.room_id} has a maximum capacity of {max_capacity} people"
                     )
-                conflicts = self.room_conflicts(payload.room_id, payload.init_day, payload.end_day, requester_ip)
+                conflicts = self.room_conflicts(payload.room_id, payload.init_day, payload.end_day, session_key)
                 if conflicts:
                     raise BookingConflict(
                         f"room {payload.room_id} is already booked for an overlapping date range "
@@ -381,7 +381,7 @@ class BookingStore:
                     raise BookingConflict(
                         f"table {payload.table_id} has a maximum capacity of {table['capacity']} people"
                     )
-                conflicts = self.table_conflicts(payload.table_id, payload.init_day, payload.hour, requester_ip)
+                conflicts = self.table_conflicts(payload.table_id, payload.init_day, payload.hour, session_key)
                 if conflicts:
                     raise BookingConflict(
                         f"table {payload.table_id} is already booked on {payload.init_day} at "
@@ -399,7 +399,7 @@ class BookingStore:
                 activity = self.catalog.activities_by_id.get(payload.activity_id)
                 if activity is None:
                     raise NotFound(f"activity_id {payload.activity_id} does not exist")
-                booked = self.activity_booked_count(payload.activity_id, payload.init_day, requester_ip)
+                booked = self.activity_booked_count(payload.activity_id, payload.init_day, session_key)
                 remaining = activity["max_capacity"] - booked
                 if payload.num_people > remaining:
                     raise BookingConflict(
@@ -431,15 +431,15 @@ class BookingStore:
                 "total_price": total_price,
                 "currency": "EUR",
                 "created_at": datetime.now().replace(microsecond=0),
-                "created_by_ip": requester_ip,
+                "created_by_session": session_key,
             }
 
             db.insert_booking(booking)
             self.dynamic_bookings.append(booking)
             return booking
 
-    def delete_by_ip(self, requester_ip: str) -> int:
+    def delete_by_session(self, session_key: str) -> int:
         with self.lock:
-            deleted = db.delete_bookings_by_ip(requester_ip)
-            self.dynamic_bookings = [b for b in self.dynamic_bookings if b["created_by_ip"] != requester_ip]
+            deleted = db.delete_bookings_by_session(session_key)
+            self.dynamic_bookings = [b for b in self.dynamic_bookings if b["created_by_session"] != session_key]
             return deleted

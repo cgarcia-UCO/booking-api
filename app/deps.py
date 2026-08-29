@@ -3,7 +3,8 @@ app/deps.py
 ------------
 Shared FastAPI dependencies: access to the in-memory catalog / booking
 store (created once at startup and kept on `app.state`), the requester's
-IP address, and a small pagination helper reused by every list endpoint.
+session key / IP, and a small pagination helper reused by every list
+endpoint.
 """
 from __future__ import annotations
 
@@ -13,7 +14,7 @@ from fastapi import Query, Request
 
 from . import config
 from .data_store import BookingStore, Catalog
-from .security import get_client_ip
+from .security import get_client_ip, optional_session_key, session_key  # noqa: F401 (re-exported)
 
 T = TypeVar("T")
 

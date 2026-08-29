@@ -41,8 +41,8 @@ async def lifespan(app: FastAPI):
 
     if config.OPENAI_API_KEY:
         logger.info(
-            "LLM endpoint enabled: model=%s, %s req/%.0fs per IP, max %d concurrent, "
-            "no access token required (see README.md section 9).",
+            "LLM endpoint enabled: model=%s, %s req/%.0fs per caller (session key or IP), "
+            "max %d concurrent, no access token required.",
             config.LLM_MODEL, config.LLM_RATE_LIMIT_MAX_REQUESTS,
             config.LLM_RATE_LIMIT_WINDOW_SECONDS, config.LLM_MAX_CONCURRENT_REQUESTS,
         )
@@ -65,7 +65,7 @@ app = FastAPI(
         "Read-only catalog of hotels, restaurants and leisure venues, plus "
         "availability checks and a booking endpoint, built for a workshop "
         "setting. See the README in the repository for the full design "
-        "notes (in particular the per-IP booking isolation model)."
+        "notes (in particular the per-session-key booking isolation model)."
     ),
     version="1.0.0",
     lifespan=lifespan,

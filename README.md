@@ -3,7 +3,8 @@
 A FastAPI service that serves the mock catalog (hotels, restaurants, leisure
 venues, and their sub-entities) produced by the data generator delivered
 earlier, plus availability checks and a booking system designed for a
-**live workshop with ~50 attendees sharing the same server**.
+**90-minute workshop on LLM-based task-oriented dialogue**, where each
+attendee's code drives one or more LLM agents against this shared server.
 
 - Every catalog entity is **read-only** and queryable with filters.
 - **Availability** endpoints for the three bookable element types (rooms,
@@ -11,15 +12,21 @@ earlier, plus availability checks and a booking system designed for a
 - **Booking creation** is the only "write" endpoint besides the reset
   endpoint below. It accepts or rejects a booking based on real overlap /
   capacity checks.
-- **Per-IP isolation**: every booking is tagged with the creator's IP.
-  Availability and booking checks always consider "the shared seed
-  dataset" + "bookings created from the same IP" — never another
-  attendee's bookings. This means 50 attendees can hit the same server at
-  the same time without ever colliding with each other.
+- **Per-session isolation**: every booking is tagged with the caller's
+  session key (`X-Session-Id` header, a random string each attendee
+  generates once at the start of their notebook run). Availability and
+  booking checks always consider "the shared seed dataset" + "bookings
+  created under the same session key" — never another attendee's
+  bookings. This means many attendees can hit the same server at the same
+  time without ever colliding with each other, **regardless of whether
+  they share an egress IP** (which they typically do on hosted notebook
+  runtimes like Google Colab — this is why session keys replaced the
+  earlier IP-based design).
 - A **reset endpoint** lets an attendee delete everything they created,
-  scoped strictly to their own IP.
-- An **LLM chat endpoint**, secured for public exposure (see the dedicated
-  section below — important caveat about its origin).
+  scoped strictly to their own session key.
+- An **LLM chat endpoint** that relays a full `messages` list (system
+  prompt + history) to OpenAI, so attendees never need an API key of
+  their own.
 
 ## 1. Project structure
 
@@ -65,12 +72,18 @@ booking_api/
   They are kept in memory *and* persisted to a small SQLite file
   (`storage/dynamic_bookings.sqlite3`) so a process restart doesn't wipe
   out bookings made during the workshop. Each one is tagged with
-  `created_by_ip`.
+  `created_by_session`.
+- **Session key** (`X-Session-Id` header): a string each attendee
+  generates once (e.g. `secrets.token_hex(8)` in Python) and sends on
+  every call to the availability/booking endpoints — it is **required**
+  there (missing it returns 422). It replaces the earlier "one attendee =
+  one IP" model, which breaks down whenever several attendees share an
+  egress IP, as is common on hosted notebook runtimes.
 - **Visibility rule** (used by every read: listings, availability,
-  overlap checks): `seed bookings ∪ {dynamic bookings where created_by_ip
-  == requester's IP}`. A booking created by attendee A is never visible
-  to, and never blocks, attendee B — while both still respect the shared
-  baseline from the seed dataset.
+  overlap checks): `seed bookings ∪ {dynamic bookings where
+  created_by_session == requester's session key}`. A booking created
+  under session A is never visible to, and never blocks, session B —
+  while both still respect the shared baseline from the seed dataset.
 
 ## 3. Important operational constraint: run a single instance
 
@@ -80,7 +93,7 @@ replicas/workers of this service, each would have its own separate copy of
 that in-memory state, and two attendees hitting different instances could
 both "successfully" book the same room. **Do not** enable multiple
 replicas or `uvicorn --workers N > 1` for this service. A single instance
-comfortably handles a 50-person workshop; nothing here is CPU-heavy.
+comfortably handles a workshop-sized audience; nothing here is CPU-heavy.
 
 ## 4. Environment variables
 
@@ -96,19 +109,22 @@ All read from the environment, with defaults suitable for local dev (see
 | `MAX_PAGE_SIZE` | `500` | Max page size a caller can request |
 | `OPENAI_API_KEY` | – | Setting this is what turns `/llm/chat` on |
 | `LLM_MODEL` | `gpt-5-nano` | Fixed server-side model; the client cannot choose one |
-| `LLM_SYSTEM_PROMPT` | (generic workshop assistant prompt) | Fixed, server-side system prompt |
-| `LLM_MAX_COMPLETION_TOKENS` | `500` | Fixed server-side; sent to OpenAI as `max_completion_tokens` |
+| `LLM_MAX_COMPLETION_TOKENS` | `600` | Fixed server-side; sent to OpenAI as `max_completion_tokens` |
 | `LLM_REQUEST_TIMEOUT` | `30` | Timeout (seconds) for the upstream OpenAI call |
-| `LLM_MAX_MESSAGE_CHARS` | `1024` | Max length of the client's `message` field (~1 KB) |
-| `LLM_MAX_HTTP_BODY_BYTES` | `1024` | Max raw HTTP body size for `POST /llm/chat`, enforced *before* parsing (~1 KB) |
-| `LLM_RATE_LIMIT_MAX_REQUESTS` | `1` | Requests allowed per IP per window |
-| `LLM_RATE_LIMIT_WINDOW_SECONDS` | `1` | Window length (seconds) for the rate limit above — default: **1 request/second/IP** |
-| `LLM_MAX_CONCURRENT_REQUESTS` | `100` | Global cap on simultaneous in-flight requests, across all IPs |
+| `LLM_MAX_MESSAGE_CHARS` | `4000` | Max length of any single message's `content` |
+| `LLM_MAX_TOTAL_CHARS` | `8000` | Max combined length of all messages in one call |
+| `LLM_MAX_MESSAGES` | `40` | Max number of messages in the `messages` list |
+| `LLM_MAX_HTTP_BODY_BYTES` | `20000` | Max raw HTTP body size for `POST /llm/chat`, enforced *before* parsing |
+| `LLM_RATE_LIMIT_MAX_REQUESTS` | `5` | Requests allowed per caller per window |
+| `LLM_RATE_LIMIT_WINDOW_SECONDS` | `1` | Window length (seconds) for the rate limit above — default: **5 requests/second per caller** |
+| `LLM_MAX_CONCURRENT_REQUESTS` | `100` | Global cap on simultaneous in-flight requests, across all callers |
 
-There is intentionally **no** `LLM_ACCESS_KEY`/shared-secret variable and
-**no** global daily/lifetime request or spend cap in this app for the LLM
-endpoint — see section 9 for why, and for what to configure on the OpenAI
-side instead.
+"Per caller" above means: the `X-Session-Id` header if the client sends
+one on `/llm/chat` (recommended, and what the workshop notebook always
+does), otherwise the source IP. There is intentionally **no**
+`LLM_ACCESS_KEY`/shared-secret variable and **no** global daily/lifetime
+request or spend cap in this app for the LLM endpoint — see section 9 for
+why, and for what to configure on the OpenAI side instead.
 
 The booking date limit (no bookings after **2027-12-31**) is a fixed rule
 in `app/config.py::MAX_BOOKING_DATE`, not an environment variable, per the
@@ -133,7 +149,7 @@ payload.
 
 Full interactive reference is always at `/docs`; this is just a map.
 
-**Catalog (read-only, all support filtering + pagination via `limit`/`offset`):**
+**Catalog (read-only, all support filtering + pagination via `limit`/`offset`, no session header needed):**
 - `GET /cities`, `GET /cities/{id}`
 - `GET /customers`, `GET /customers/{id}`
 - `GET /hotels`, `GET /hotels/{id}` (filters: city, type, category, price_range, rating, pet_friendly, accessible, reception_24h, services)
@@ -144,18 +160,34 @@ Full interactive reference is always at `/docs`; this is just a map.
 - `GET /dishes`, `GET /dishes/{id}`, `GET /restaurants/{id}/dishes` (filters: category, max_price, dietary_tags, exclude_allergens, max_spicy_level)
 - `GET /activities`, `GET /activities/{id}` (filters: city, activity_type, category, indoor_outdoor, accessible, rating, max_price, suitable_for_age, services)
 
-**Availability (read-only, isolation-aware):**
+**Availability (read-only, isolation-aware — REQUIRES `X-Session-Id`):**
 - `GET /availability/rooms?init_day=&end_day=&hotel_id=&room_type_id=&room_id=`
 - `GET /availability/tables?day=&hour=&restaurant_id=&table_id=&min_capacity=`
 - `GET /availability/activities?day=&activity_id=&num_people=`
 
-**Bookings (the only write endpoints in the API):**
+**Bookings (the only write endpoints in the API — REQUIRE `X-Session-Id`):**
 - `GET /bookings` (filters incl. `only_mine`), `GET /bookings/{id}` — isolation-aware
 - `POST /bookings` — create a booking; see below
-- `DELETE /bookings/mine` — deletes every booking created by the requester's IP
+- `DELETE /bookings/mine` — deletes every booking created under the requester's session key
 
-**LLM:**
+**LLM (session header optional but recommended):**
 - `POST /llm/chat` — see section 9
+
+### The `X-Session-Id` header
+
+Every availability/booking endpoint requires an `X-Session-Id` header —
+any non-empty string between 4 and 128 characters that you generate once
+per client run and reuse on every call:
+
+```python
+import secrets
+SESSION_ID = secrets.token_hex(8)   # e.g. "3f9a1c7b2e4d5f60"
+HEADERS = {"X-Session-Id": SESSION_ID}
+```
+
+Missing it returns `422`. Reusing the literal value `"seed"` is harmless
+but pointless — it gets silently rewritten so you can never impersonate
+or collide with the shared seed dataset.
 
 ### Creating a booking
 
@@ -295,36 +327,38 @@ dashboard, or with the CLI (`railway up`) if you deployed that way instead.
 
 ## 9. LLM endpoint — design rationale
 
-The endpoint follows the architecture and protections agreed for this
-specific scenario: a demo reachable on the public internet for about two
-hours, backed by a real OpenAI budget. The key insight (from that
-discussion) is that the main risk for a short public demo isn't someone
-stealing the API key off a well-configured server — it's **someone
-discovering the endpoint and using it as a free, unlimited proxy to
-OpenAI**. A script can fire an enormous number of requests in two hours if
-nothing stops it. So, alongside fixing the model and output length, this
-endpoint implements:
+This endpoint exists so attendees never need an OpenAI API key of their
+own: their code calls `POST /llm/chat` with the messages they want to
+send, and the server relays the call to OpenAI. It evolved from an
+earlier "2-hour public demo" design (anonymous internet traffic, a single
+free-text `message`, 1 req/s/IP) into this workshop version, where callers
+are identified attendees who need to design their own system prompts and
+manage their own conversation history — the whole point of the exercise.
+What changed and why:
+
+| Aspect | Public-demo version | Workshop version (current) |
+|---|---|---|
+| Request body | Single `message: str` | Full `messages: [{role, content}, ...]` — system prompt + history included |
+| System prompt | Fixed server-side | Chosen by the client, as part of `messages` |
+| Rate-limit identity | Source IP | `X-Session-Id` if sent (falls back to IP) — avoids every attendee on a shared Colab/notebook IP fighting over one bucket |
+| Rate limit | 1 req/s | 5 req/s per caller (agent loops may need to iterate quickly) |
+| Body-size cap | ~1 KB | ~20 KB (`LLM_MAX_HTTP_BODY_BYTES`), since a full conversation is naturally bigger than one message |
+
+What **didn't** change — these safety nets stay regardless of scenario:
 
 | Protection | Implementation |
 |---|---|
 | API key never reaches the client | `OPENAI_API_KEY` stays server-side only, in `app/config.py` |
-| Rate limit per IP | **1 request/second/IP** (`LLM_RATE_LIMIT_MAX_REQUESTS` / `_WINDOW_SECONDS`), via the in-memory sliding-window `RateLimiter` |
-| Global concurrency limit | **100 concurrent requests** across all users combined (`LLM_MAX_CONCURRENT_REQUESTS`), via the async `ConcurrencyLimiter` — requests beyond the cap are rejected (503) immediately, never queued |
 | Fixed model | `LLM_MODEL` (default `gpt-5-nano`); not a request parameter |
-| Fixed/whitelisted parameters | The request schema (`LLMChatRequest`) accepts **only** a `message` string — no `model`, `temperature`, `tools`, etc. Any extra field is rejected with 422 (`extra="forbid"`) |
-| Max HTTP size before tokenizing | `app/middleware.py::MaxBodySizeMiddleware` rejects (413) any `/llm/chat` body over `LLM_MAX_HTTP_BODY_BYTES` (~1 KB) as it streams in — before FastAPI ever parses JSON or touches the OpenAI call. This also protects against a client that omits/lies about `Content-Length` |
-| Max input size (message) | `LLM_MAX_MESSAGE_CHARS` (~1 KB) enforced again at the Pydantic field level, as a second, independent layer of defense |
-| Fixed max output tokens | `LLM_MAX_COMPLETION_TOKENS`, sent to OpenAI as `max_completion_tokens` (the parameter name OpenAI itself recommends capping) |
+| Fixed max output tokens | `LLM_MAX_COMPLETION_TOKENS`, sent to OpenAI as `max_completion_tokens` |
+| Whitelisted request shape | Only `role`/`content` per message are accepted; any extra field anywhere is rejected with 422 (`extra="forbid"`) |
+| Max HTTP size before parsing | `app/middleware.py::MaxBodySizeMiddleware` rejects (413) any `/llm/chat` body over `LLM_MAX_HTTP_BODY_BYTES` as it streams in — before FastAPI ever parses JSON. Also protects against a client that omits/lies about `Content-Length` |
+| Max combined message size | `LLM_MAX_TOTAL_CHARS` and `LLM_MAX_MESSAGES`, enforced at the Pydantic level as a second, independent layer of defense |
+| Global concurrency limit | `LLM_MAX_CONCURRENT_REQUESTS` (default 100) across all callers combined, via the async `ConcurrencyLimiter` — requests beyond the cap are rejected (503) immediately, never queued |
 | Timeouts | `LLM_REQUEST_TIMEOUT` on the upstream call |
-| No global spend/requests cap in-app | Deliberately **not** implemented here — total spend is bounded on the **OpenAI side** instead (see "Recommended OpenAI-side setup" below) |
-| No access token for this endpoint | By explicit choice for this short, supervised demo — see note below if you reuse this beyond that scenario |
+| No global spend/requests cap in-app | Deliberately **not** implemented here — total spend is bounded on the **OpenAI side** instead (see below) |
+| No access token for this endpoint | By explicit choice — the barrier to entry is intentionally zero |
 | No leaking internal errors | Any OpenAI/network failure is logged server-side and returned to the client as a generic 502 |
-
-Two of these are intentionally sized identically (~1 KB) by design: the
-raw HTTP body cap and the parsed-message cap. In practice, because they're
-equal, the HTTP-level check (413) will almost always be the one that fires
-first for an oversized request — the field-level check (422) mainly acts
-as a backstop in case the two limits are ever tuned independently later.
 
 ### Recommended OpenAI-side setup (not enforced by this code)
 
@@ -335,20 +369,24 @@ side before the workshop:
    from anything else on your account.
 2. Issue a **project-scoped API key** for it, set as `OPENAI_API_KEY` on
    Railway.
-3. Set a **hard budget limit** on that project (a few euros/dollars is
-   plenty for a `gpt-5-nano` demo with 1 req/s/IP and ~1 KB inputs/outputs).
-4. After the workshop, **revoke the key** (or delete the project). This
-   bounds your worst-case exposure to exactly the two-hour window,
-   regardless of what happens at the HTTP layer.
+3. Set a **hard budget limit** on that project (a `gpt-5-nano` workshop
+   for 90 minutes with dozens of attendees is still inexpensive, but a
+   hard cap removes any doubt).
+4. After the workshop, **revoke the key** (or delete the project).
 
 ### Calling it
 
-No header or token is required:
+No access token is required; sending `X-Session-Id` is optional here but
+recommended (see the rate-limit identity note above):
 
 ```bash
 curl -X POST https://<your-app>.up.railway.app/llm/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "What kind of leisure venues are in the catalog?"}'
+  -H "X-Session-Id: <your session key>" \
+  -d '{"messages": [
+        {"role": "system", "content": "You are a helpful hotel booking assistant."},
+        {"role": "user", "content": "What kind of leisure venues are in the catalog?"}
+      ]}'
 ```
 
 Response:
@@ -356,64 +394,69 @@ Response:
 {"reply": "...", "model": "gpt-5-nano", "usage": {"prompt_tokens": 42, "completion_tokens": 30, "total_tokens": 72}}
 ```
 
-The endpoint is stateless — there is no `history`/conversation memory, by
-design (the client may only ever send the single `message` field).
+The endpoint itself is stateless: there's no server-side conversation
+memory. Your code is responsible for keeping the running history and
+resending however much of it (the last *n* turns, a summary, all of it...)
+you want on each call — see the notebook, section 3.
 
 ### Testing the protections
 
 ```bash
 BASE=https://<your-app>.up.railway.app
+SID="test-session-0001"
 
 # 1) Normal call
-curl -s -X POST $BASE/llm/chat -H "Content-Type: application/json" \
-  -d '{"message": "Recommend a 3-star hotel"}'
+curl -s -X POST $BASE/llm/chat -H "Content-Type: application/json" -H "X-Session-Id: $SID" \
+  -d '{"messages": [{"role": "user", "content": "Recommend a 3-star hotel"}]}'
 
-# 2) Rate limit: fire two requests back to back from the same IP —
-#    the second should come back as 429
-curl -s -o /dev/null -w "%{http_code}\n" -X POST $BASE/llm/chat -H "Content-Type: application/json" -d '{"message": "hi"}'
-curl -s -o /dev/null -w "%{http_code}\n" -X POST $BASE/llm/chat -H "Content-Type: application/json" -d '{"message": "hi"}'
+# 2) Rate limit: fire 6 requests back to back from the same session —
+#    at least one should come back as 429 (limit is 5/s by default)
+for i in $(seq 1 6); do
+  curl -s -o /dev/null -w "%{http_code} " -X POST $BASE/llm/chat \
+    -H "Content-Type: application/json" -H "X-Session-Id: $SID" \
+    -d '{"messages": [{"role": "user", "content": "hi"}]}'
+done; echo
 
-# 3) Body-size cap: send an oversized body — expect 413, and it should be
-#    fast (rejected before any OpenAI call is even attempted)
-python3 -c "print('{\"message\": \"' + 'x'*2000 + '\"}')" > /tmp/big.json
-curl -s -o /dev/null -w "%{http_code}\n" -X POST $BASE/llm/chat -H "Content-Type: application/json" --data-binary @/tmp/big.json
+# 3) Client cannot pick the model or add extra fields — rejected (422)
+curl -s -X POST $BASE/llm/chat -H "Content-Type: application/json" -H "X-Session-Id: $SID" \
+  -d '{"messages": [{"role": "user", "content": "hi"}], "model": "gpt-5"}'
 
-# 4) Client cannot pick the model/params — extra fields are rejected (422)
-curl -s -X POST $BASE/llm/chat -H "Content-Type: application/json" \
-  -d '{"message": "hi", "model": "gpt-5"}'
+# 4) Oversized body -> 413, fast (rejected before any OpenAI call)
+python3 -c "import json; print(json.dumps({'messages':[{'role':'user','content':'x'*25000}]}))" > /tmp/big.json
+curl -s -o /dev/null -w "%{http_code}\n" -X POST $BASE/llm/chat \
+  -H "Content-Type: application/json" -H "X-Session-Id: $SID" --data-binary @/tmp/big.json
 ```
 
 To exercise the 100-concurrent-request cap you need genuinely parallel
-requests (a single `curl` loop is too slow to trigger it); a short
-`asyncio`/`httpx` script or a tool like `hey`/`wrk` firing >100 requests at
-once against `/llm/chat` will show some responses coming back as 503 once
-the cap is reached, and 200 for the rest.
+requests (a `curl` loop is too slow); a short `asyncio`/`httpx` script or
+a tool like `hey`/`wrk` firing >100 requests at once will show some
+responses coming back as 503 once the cap is reached.
 
-### If you reuse this endpoint outside the 2-hour workshop scenario
+### If you reuse this endpoint outside this workshop's scenario
 
-The "no access token" and "no global cap" choices are specific to this
-short, supervised, budget-capped-on-OpenAI's-side demo. For anything
-longer-lived or unsupervised, at minimum:
-- reintroduce a shared-secret header (the previous iteration of this file
-  used `X-LLM-Key`/`LLM_ACCESS_KEY`; trivial to bring back in
-  `app/routers/llm.py`), and/or
-- add an application-level global request/spend counter in addition to
-  the OpenAI-side budget.
+The "no access token" and "no global cap" choices are specific to a
+short, supervised event with a budget capped on OpenAI's side. For
+anything longer-lived or unsupervised, at minimum: reintroduce a
+shared-secret header, and/or add an application-level global
+request/spend counter in addition to the OpenAI-side budget.
 
 ## 10. Known limitations / possible extensions
 
 - Single-instance, in-memory + SQLite design (see section 3) — sufficient
   for a workshop, not meant for high-availability production use.
 - No authentication on the catalog/availability/booking endpoints; the
-  only "auth" concept is the per-IP isolation model and the optional LLM
-  access key. Add proper auth if you reuse this outside the workshop
-  context.
-- `created_by_ip` isolation is IP-based, so attendees behind the same
-  NAT/corporate network or VPN would share a "sandbox". For a workshop
-  where each attendee uses their own laptop/hotspot this is normally not
-  an issue; if it is, an alternative would be to have the client generate
-  a random per-session token instead of relying on IP (happy to add this
-  if needed).
+  only "auth" concept is the per-session isolation model. Add proper auth
+  if you reuse this outside the workshop context.
+- Session keys are entirely client-chosen and unverified (any string of
+  the right length works) — by design, since the goal is collision
+  avoidance between attendees, not real authentication. A malicious
+  client could still guess/reuse someone else's session key; this is
+  considered an acceptable risk for a supervised workshop.
 - Booking status for API-created bookings is always `confirmed` (no
   pending/cancellation workflow is exposed, matching the "no create/delete
   endpoints except for bookings" requirement).
+- The `/llm/chat` endpoint is a thin relay: it does not manage
+  conversation state, tool calls, or agent logic — all of that lives in
+  the attendees' own notebook code, by design (see the accompanying
+  Colab notebook).
+

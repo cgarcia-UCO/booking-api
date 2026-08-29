@@ -8,6 +8,12 @@ bookings made during the workshop.
 
 Only the standard library is used (`sqlite3`), so no extra dependency is
 required.
+
+NOTE: the `created_by_session` column used to be `created_by_ip` (from the
+original per-IP isolation model). If you're upgrading an existing
+deployment, delete the old storage/dynamic_bookings.sqlite3 file (or point
+STORAGE_DIR at a fresh path) so the new schema is created cleanly — the
+two models aren't meant to be merged.
 """
 from __future__ import annotations
 
@@ -37,7 +43,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     total_price REAL NOT NULL,
     currency TEXT NOT NULL,
     created_at TEXT NOT NULL,
-    created_by_ip TEXT NOT NULL
+    created_by_session TEXT NOT NULL
 );
 """
 
@@ -73,7 +79,7 @@ def insert_booking(booking: dict) -> None:
             booking_id, booking_reference, customer_id, booking_type, status,
             hotel_id, room_id, restaurant_id, table_id, activity_id,
             init_day, end_day, hour, num_people, total_price, currency,
-            created_at, created_by_ip
+            created_at, created_by_session
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
@@ -83,15 +89,15 @@ def insert_booking(booking: dict) -> None:
             booking["table_id"], booking["activity_id"],
             booking["init_day"].isoformat(), booking["end_day"].isoformat(), booking["hour"],
             booking["num_people"], booking["total_price"], booking["currency"],
-            booking["created_at"].isoformat(sep=" "), booking["created_by_ip"],
+            booking["created_at"].isoformat(sep=" "), booking["created_by_session"],
         ),
     )
     conn.commit()
 
 
-def delete_bookings_by_ip(ip: str) -> int:
+def delete_bookings_by_session(session_key: str) -> int:
     conn = get_connection()
-    cur = conn.execute("DELETE FROM bookings WHERE created_by_ip = ?", (ip,))
+    cur = conn.execute("DELETE FROM bookings WHERE created_by_session = ?", (session_key,))
     conn.commit()
     return cur.rowcount
 
@@ -121,5 +127,5 @@ def _row_to_booking(row: sqlite3.Row) -> dict:
         "total_price": row["total_price"],
         "currency": row["currency"],
         "created_at": datetime.strptime(row["created_at"], "%Y-%m-%d %H:%M:%S"),
-        "created_by_ip": row["created_by_ip"],
+        "created_by_session": row["created_by_session"],
     }

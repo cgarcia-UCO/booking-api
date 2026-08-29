@@ -4,7 +4,7 @@ app/routers/availability.py
 Read-only availability checks for the three bookable element types (rooms,
 tables, leisure venues). Per the isolation model described in the README,
 these checks always consider "seed bookings + bookings created by the
-requesting IP" as the set of bookings that can block a slot.
+requesting session key" (X-Session-Id header) as the set of bookings that can block a slot.
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from .. import schemas
 from ..data_store import BookingStore, Catalog
-from ..deps import client_ip, get_booking_store, get_catalog
+from ..deps import get_booking_store, get_catalog, session_key
 from ..schemas import HOUR_RE
 
 router = APIRouter(prefix="/availability", tags=["Availability"])
@@ -39,7 +39,7 @@ def rooms_availability(
     only_available: bool = Query(False, description="If true, only return rooms that ARE available"),
     catalog: Catalog = Depends(get_catalog),
     store: BookingStore = Depends(get_booking_store),
-    ip: str = Depends(client_ip),
+    session: str = Depends(session_key),
 ):
     if end_day <= init_day:
         raise HTTPException(status_code=400, detail="'end_day' must be after 'init_day'")
@@ -57,7 +57,7 @@ def rooms_availability(
 
     results = []
     for room in candidates:
-        conflicts = store.room_conflicts(room["room_id"], init_day, end_day, ip)
+        conflicts = store.room_conflicts(room["room_id"], init_day, end_day, session)
         available = not conflicts
         if only_available and not available:
             continue
@@ -92,7 +92,7 @@ def tables_availability(
     only_available: bool = Query(False, description="If true, only return tables that ARE available"),
     catalog: Catalog = Depends(get_catalog),
     store: BookingStore = Depends(get_booking_store),
-    ip: str = Depends(client_ip),
+    session: str = Depends(session_key),
 ):
     if not HOUR_RE.match(hour):
         raise HTTPException(status_code=400, detail="'hour' must match 24h format HH:MM, e.g. '20:30'")
@@ -110,7 +110,7 @@ def tables_availability(
 
     results = []
     for table in candidates:
-        conflicts = store.table_conflicts(table["table_id"], day, hour, ip)
+        conflicts = store.table_conflicts(table["table_id"], day, hour, session)
         available = not conflicts
         if only_available and not available:
             continue
@@ -138,7 +138,7 @@ def activities_availability(
     only_available: bool = Query(False, description="If true and num_people is set, only return venues that fit the group"),
     catalog: Catalog = Depends(get_catalog),
     store: BookingStore = Depends(get_booking_store),
-    ip: str = Depends(client_ip),
+    session: str = Depends(session_key),
 ):
     if activity_id is not None:
         candidates = [catalog.activities_by_id[activity_id]] if activity_id in catalog.activities_by_id else []
@@ -149,7 +149,7 @@ def activities_availability(
 
     results = []
     for activity in candidates:
-        booked = store.activity_booked_count(activity["activity_id"], day, ip)
+        booked = store.activity_booked_count(activity["activity_id"], day, session)
         remaining = activity["max_capacity"] - booked
         if num_people is not None:
             available = remaining >= num_people
