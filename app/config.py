@@ -132,7 +132,7 @@ LLM_MAX_MESSAGES = _env_int("LLM_MAX_MESSAGES", 40)
 # parsed at all (see app/middleware.py). Sized generously above
 # LLM_MAX_TOTAL_CHARS to leave room for JSON syntax overhead (roles,
 # braces, escaping) across up to LLM_MAX_MESSAGES messages.
-LLM_MAX_HTTP_BODY_BYTES = _env_int("LLM_MAX_HTTP_BODY_BYTES", 20000)
+LLM_MAX_HTTP_BODY_BYTES = _env_int("LLM_MAX_HTTP_BODY_BYTES", 40000)
 
 # Rate limit: N requests per caller within a sliding window of M seconds.
 # The "caller" is the X-Session-Id header if the client sends one (it's
