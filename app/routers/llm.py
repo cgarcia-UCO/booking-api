@@ -136,4 +136,4 @@ async def llm_chat(
         }
 
     # return schemas.LLMChatResponse(reply=choice.message.content or "", model=config.LLM_MODEL, usage=usage)
-    return schemas.LLMChatResponse(reply=choice.message.content or "", usage=usage)
+    return schemas.LLMChatResponse(reply=choice.message.content or "", model="", usage=usage)
