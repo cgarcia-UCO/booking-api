@@ -117,22 +117,22 @@ LLM_MODEL = os.environ.get("LLM_MODEL", "gpt-5-nano")
 # Fixed on the server; the client cannot influence this. Passed to OpenAI
 # as `max_completion_tokens` (the parameter OpenAI recommends capping,
 # since it affects both cost and rate limits).
-LLM_MAX_COMPLETION_TOKENS = _env_int("LLM_MAX_COMPLETION_TOKENS", 600)
-LLM_REQUEST_TIMEOUT = float(os.environ.get("LLM_REQUEST_TIMEOUT", "30"))
+LLM_MAX_COMPLETION_TOKENS = _env_int("LLM_MAX_COMPLETION_TOKENS", 2000)
+LLM_REQUEST_TIMEOUT = float(os.environ.get("LLM_REQUEST_TIMEOUT", "60"))
 
 # Per-message and whole-conversation size limits. A single message (e.g. a
 # system prompt describing several tools) can legitimately be a couple of
 # KB; the combined total across all messages in one call is capped more
 # tightly to bound per-request cost.
-LLM_MAX_MESSAGE_CHARS = _env_int("LLM_MAX_MESSAGE_CHARS", 4000)
-LLM_MAX_TOTAL_CHARS = _env_int("LLM_MAX_TOTAL_CHARS", 8000)
+LLM_MAX_MESSAGE_CHARS = _env_int("LLM_MAX_MESSAGE_CHARS", 20000)
+LLM_MAX_TOTAL_CHARS = _env_int("LLM_MAX_TOTAL_CHARS", 20000)
 LLM_MAX_MESSAGES = _env_int("LLM_MAX_MESSAGES", 40)
 
 # Hard HTTP body-size cap for POST /llm/chat, enforced *before* the body is
 # parsed at all (see app/middleware.py). Sized generously above
 # LLM_MAX_TOTAL_CHARS to leave room for JSON syntax overhead (roles,
 # braces, escaping) across up to LLM_MAX_MESSAGES messages.
-LLM_MAX_HTTP_BODY_BYTES = _env_int("LLM_MAX_HTTP_BODY_BYTES", 20_000)
+LLM_MAX_HTTP_BODY_BYTES = _env_int("LLM_MAX_HTTP_BODY_BYTES", 40000)
 
 # Rate limit: N requests per caller within a sliding window of M seconds.
 # The "caller" is the X-Session-Id header if the client sends one (it's
@@ -148,7 +148,7 @@ LLM_RATE_LIMIT_WINDOW_SECONDS = float(os.environ.get("LLM_RATE_LIMIT_WINDOW_SECO
 
 # Global concurrency cap across all callers (not per caller). Requests
 # beyond this are rejected immediately (503) rather than queued.
-LLM_MAX_CONCURRENT_REQUESTS = _env_int("LLM_MAX_CONCURRENT_REQUESTS", 100)
+LLM_MAX_CONCURRENT_REQUESTS = _env_int("LLM_MAX_CONCURRENT_REQUESTS", 200)
 
 # ---------------------------------------------------------------------------
 # Semantic search (see app/embeddings.py)
