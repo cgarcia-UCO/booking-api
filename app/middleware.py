@@ -6,7 +6,7 @@ specific set of paths, checked as the body streams in — so it protects
 against a client that omits or lies about the `Content-Length` header,
 not just against a truthful one.
 
-This implements the "tamaño máximo HTTP antes incluso de tokenizar"
+This implements a "hard HTTP size limit before tokenizing" style
 protection: the body is measured and rejected (413) before it is ever
 handed to FastAPI's request parsing, Pydantic validation, or the LLM
 prompt itself.

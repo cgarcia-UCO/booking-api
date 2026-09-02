@@ -37,7 +37,8 @@ booking_api/
 │   ├── config.py          # All environment variables, in one place
 │   ├── data_store.py       # CSV loading + Catalog + BookingStore (overlap logic)
 │   ├── db.py                # SQLite persistence for dynamically created bookings
-│   ├── schemas.py           # Pydantic models (catalog entities + booking/LLM I/O)
+│   ├── embeddings.py         # Precomputed embeddings + cosine-similarity search (semantic search)
+│   ├── schemas.py           # Pydantic models (catalog entities + booking/LLM/search I/O)
 │   ├── deps.py               # Shared FastAPI dependencies (catalog, IP, pagination)
 │   ├── filtering.py           # Small query-filtering helpers
 │   ├── security.py             # Client IP resolution + in-memory rate limiter
@@ -49,7 +50,8 @@ booking_api/
 │       ├── activities.py
 │       ├── availability.py
 │       ├── bookings.py
-│       └── llm.py
+│       ├── llm.py
+│       └── semantic_search.py
 ├── data/                     # Bundled seed CSVs (see section 7 to regenerate)
 ├── storage/                  # SQLite file with dynamically created bookings (gitignored)
 ├── requirements.txt
@@ -118,6 +120,7 @@ All read from the environment, with defaults suitable for local dev (see
 | `LLM_RATE_LIMIT_MAX_REQUESTS` | `5` | Requests allowed per caller per window |
 | `LLM_RATE_LIMIT_WINDOW_SECONDS` | `1` | Window length (seconds) for the rate limit above — default: **5 requests/second per caller** |
 | `LLM_MAX_CONCURRENT_REQUESTS` | `100` | Global cap on simultaneous in-flight requests, across all callers |
+| `COMPUTE_EMBEDDINGS_ON_STARTUP` | `true` | Whether to compute semantic-search embeddings at startup (see section 10). Only takes effect if `OPENAI_API_KEY` is set |
 
 "Per caller" above means: the `X-Session-Id` header if the client sends
 one on `/llm/chat` (recommended, and what the workshop notebook always
@@ -172,6 +175,9 @@ Full interactive reference is always at `/docs`; this is just a map.
 
 **LLM (session header optional but recommended):**
 - `POST /llm/chat` — see section 9
+
+**Semantic search (requires `OPENAI_API_KEY`):**
+- `POST /semantic-search` — see section 10
 
 ### The `X-Session-Id` header
 
@@ -440,7 +446,42 @@ anything longer-lived or unsupervised, at minimum: reintroduce a
 shared-secret header, and/or add an application-level global
 request/spend counter in addition to the OpenAI-side budget.
 
-## 10. Known limitations / possible extensions
+## 10. Semantic search
+
+`POST /semantic-search` finds catalog entities whose `description` is
+semantically similar to a free-text query, using OpenAI embeddings compared
+by cosine similarity — useful for open-ended requests ("a quiet romantic
+hotel with a pool") that don't map onto the exact-match filters of the
+regular catalog endpoints.
+
+- Supported `entity_type` values: `hotel`, `room_type`, `restaurant`,
+  `activity`, `dish` — the five entities that have a `description` field.
+- Embeddings for the whole catalog are computed **once, at startup**
+  (`app/embeddings.py::build_indexes`), gated on `OPENAI_API_KEY` being set
+  (same pattern as `/llm/chat`); the query itself is embedded on the fly,
+  per request. Set `COMPUTE_EMBEDDINGS_ON_STARTUP=false` to skip this at
+  startup (e.g. for faster local iteration when you don't need the feature).
+- Model: `text-embedding-3-small` (hardcoded in `app/embeddings.py`).
+- Vectors are kept in memory as plain numpy arrays — more than enough for a
+  demo catalog this size; a real production system would use a proper
+  vector database instead.
+
+```bash
+curl -X POST https://<your-app>.up.railway.app/semantic-search \
+  -H "Content-Type: application/json" \
+  -d '{"entity_type": "hotel", "query": "a quiet romantic hotel with a pool", "limit": 3}'
+```
+
+```json
+{
+  "query": "a quiet romantic hotel with a pool",
+  "results": [
+    {"entity_type": "hotel", "id": 25, "similarity": 0.59, "entity": { "...": "full hotel record" }}
+  ]
+}
+```
+
+## 11. Known limitations / possible extensions
 
 - Single-instance, in-memory + SQLite design (see section 3) — sufficient
   for a workshop, not meant for high-availability production use.

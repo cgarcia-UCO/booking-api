@@ -351,3 +351,35 @@ class LLMChatResponse(BaseModel):
     reply: str
     model: str
     usage: Optional[dict] = None
+
+
+# ---------------------------------------------------------------------------
+# Semantic search
+# ---------------------------------------------------------------------------
+EntityTypeWithDescription = Literal["hotel", "room_type", "restaurant", "activity", "dish"]
+
+
+class SemanticSearchRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    entity_type: EntityTypeWithDescription = Field(
+        description="Which catalog entity to search over. All five types have a free-text 'description' field."
+    )
+    query: str = Field(
+        min_length=1, max_length=1000,
+        description="The user's question, or a short description of what they're looking for. "
+                    "Does not need to be a literal keyword match — this is a semantic (embedding-based) search.",
+    )
+    limit: int = Field(default=5, ge=1, le=20)
+
+
+class SemanticSearchResult(BaseModel):
+    entity_type: EntityTypeWithDescription
+    id: int
+    similarity: float = Field(description="Cosine similarity to the query, in [-1, 1] (higher is more similar).")
+    entity: dict = Field(description="The full catalog record for this entity, as returned by its normal GET endpoint.")
+
+
+class SemanticSearchResponse(BaseModel):
+    query: str
+    results: list[SemanticSearchResult]

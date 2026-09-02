@@ -19,8 +19,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from . import config
 from .data_store import BookingStore, Catalog
+from .embeddings import build_indexes
 from .middleware import MaxBodySizeMiddleware
-from .routers import activities, availability, bookings, cities, customers, hotels, llm, restaurants
+from .routers import activities, availability, bookings, cities, customers, hotels, llm, restaurants, semantic_search
 from .security import ConcurrencyLimiter, RateLimiter
 
 logging.basicConfig(level=logging.INFO)
@@ -49,10 +50,22 @@ async def lifespan(app: FastAPI):
     else:
         logger.info("LLM endpoint disabled (no OPENAI_API_KEY set).")
 
+    if config.COMPUTE_EMBEDDINGS_ON_STARTUP:
+        try:
+            embedding_indexes = build_indexes(catalog)
+        except Exception as exc:  # noqa: BLE001 - semantic search is optional; never take the whole API down for it
+            logger.error("Failed to build semantic search embeddings (semantic search will be "
+                         "disabled, everything else still works): %s", exc)
+            embedding_indexes = {}
+    else:
+        logger.info("Semantic search embedding computation skipped (COMPUTE_EMBEDDINGS_ON_STARTUP=false).")
+        embedding_indexes = {}
+
     app.state.catalog = catalog
     app.state.booking_store = booking_store
     app.state.llm_rate_limiter = RateLimiter()
     app.state.llm_concurrency_limiter = ConcurrencyLimiter(config.LLM_MAX_CONCURRENT_REQUESTS)
+    app.state.embedding_indexes = embedding_indexes
 
     yield  # application runs here
 
@@ -92,6 +105,7 @@ app.include_router(activities.router)
 app.include_router(availability.router)
 app.include_router(bookings.router)
 app.include_router(llm.router)
+app.include_router(semantic_search.router)
 
 
 @app.get("/", tags=["Health"], summary="API info / health check")
