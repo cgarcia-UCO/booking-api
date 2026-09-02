@@ -135,4 +135,5 @@ async def llm_chat(
             "total_tokens": response.usage.total_tokens,
         }
 
-    return schemas.LLMChatResponse(reply=choice.message.content or "", model=config.LLM_MODEL, usage=usage)
+    # return schemas.LLMChatResponse(reply=choice.message.content or "", model=config.LLM_MODEL, usage=usage)
+    return schemas.LLMChatResponse(reply=choice.message.content or "", usage=usage)
