@@ -122,7 +122,7 @@ async def llm_chat(
             logger.warning("LLM call failed: %s", exc)
             raise HTTPException(
                 status_code=502,
-                detail="The language model is temporarily unavailable. Please try again shortly.",
+                detail=f"The language model is temporarily unavailable. Please try again shortly. ({exc})",
             )
     finally:
         await concurrency.release()
